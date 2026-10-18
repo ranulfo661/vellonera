@@ -1,0 +1,760 @@
+<!doctype html>
+<html lang="es">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>La Vellonera</title>
+<meta name="description" content="Echa 5 centavos y escoge tu merengue en una vellonera de los 70. Hoy: «Cumpleaños feliz» para el profesor Manuel Inoa.">
+<meta name="theme-color" content="#120d0b">
+<link rel="manifest" href="manifest.webmanifest">
+<link rel="icon" type="image/png" sizes="192x192" href="icon-192.png">
+<link rel="apple-touch-icon" href="icon-180.png">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Vellonera">
+<!-- Tarjeta de vista previa para WhatsApp y Facebook -->
+<meta property="og:type" content="website">
+<meta property="og:title" content="La Vellonera · ¡Feliz cumpleaños, profesor Manuel Inoa!">
+<meta property="og:description" content="Echa 5 centavos, marca A7 y que suene el merengue. Una vellonera de los 70 en un colmado de diciembre de 1976.">
+<meta property="og:image" content="https://USUARIO.github.io/vellonera/og.png">
+<meta property="og:image:width" content="1200">
+<meta property="og:image:height" content="630">
+<meta property="og:url" content="https://USUARIO.github.io/vellonera/">
+<style>:root{color-scheme:dark;padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}*,*::before,*::after{box-sizing:border-box}body{margin:0;font:14px/1.4 system-ui,sans-serif}img{max-width:100%}[hidden]{display:none!important}</style>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Shrikhand&family=Courier+Prime:wght@400;700&family=Barlow+Condensed:wght@400;500;600;700&display=swap">
+<style>
+/* Layout: app de pantalla completa. El colmado llena la pantalla; la vellonera de madera en perspectiva va encima, lo más grande posible; menús y botones flotan en las esquinas. Look único, oscuro y envejecido, a propósito. */
+:root{
+  --room:#120d0b;
+  --glass:rgba(24,17,13,.84);
+  --panel:#231912;
+  --cream:#f3e7cc;
+  --ink:#2a1a12;
+  --amber:#f0a23a;
+  --gold:#e8c46a;
+  --fb:#3b6fd4;
+  --line:rgba(243,231,204,.18);
+  --muted:#bfae90;
+  --f-display:'Shrikhand',Georgia,'Times New Roman',serif;
+  --f-type:'Courier Prime','Courier New',Courier,monospace;
+  --f-ui:'Barlow Condensed','Arial Narrow','Helvetica Neue',Arial,sans-serif;
+  color-scheme:dark;
+}
+html,body{height:100%;background:var(--room);color:var(--cream)}
+body{font-family:var(--f-ui);font-size:16px;line-height:1.4;overflow:hidden;-webkit-tap-highlight-color:transparent}
+.scene{position:fixed;inset:0;overflow:hidden;background:var(--room)}
+.scene svg{position:absolute;inset:0;width:100%;height:100%;display:block}
+#jb{touch-action:manipulation}
+#confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:12}
+
+.hud{position:fixed;z-index:20;display:flex;gap:6px;align-items:center}
+.hud.tl{top:calc(10px + env(safe-area-inset-top,0px));left:max(16px,env(safe-area-inset-left,0px))}
+.hud.tr{top:calc(10px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px))}
+.hud.bl{bottom:calc(14px + env(safe-area-inset-bottom,0px));left:max(16px,env(safe-area-inset-left,0px))}
+.hud.br{bottom:calc(14px + env(safe-area-inset-bottom,0px));right:max(16px,env(safe-area-inset-right,0px))}
+.brand{font:400 1.2rem/1 var(--f-display);color:var(--cream);text-shadow:0 2px 0 #7a2a1e,0 0 18px rgba(0,0,0,.8);white-space:nowrap}
+.mbtn,.fab{font:600 .86rem var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--cream);background:var(--glass);border:1px solid var(--line);border-radius:999px;padding:7px 13px;cursor:pointer;white-space:nowrap;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.mbtn:hover,.fab:hover{border-color:var(--amber);color:var(--amber)}
+.mbtn[aria-expanded="true"]{background:var(--amber);border-color:var(--amber);color:var(--ink)}
+.mbtn:focus-visible,.fab:focus-visible,.tool:focus-visible,.btn:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+@media (max-width:460px){.brand{font-size:1rem}.hud{gap:4px}.mbtn,.fab{font-size:.78rem;padding:6px 10px;letter-spacing:.03em}}
+@media (max-width:370px){.brand{display:none}}
+
+.panel{position:fixed;z-index:30;top:calc(54px + env(safe-area-inset-top,0px));right:max(16px,env(safe-area-inset-right,0px));width:min(410px,calc(100vw - 32px));max-height:calc(100% - 80px);overflow:auto;background:var(--panel);border:1px solid var(--line);border-radius:14px;box-shadow:0 18px 40px rgba(0,0,0,.6);padding:14px}
+.panel h2{font:400 1.2rem var(--f-display);margin:0 0 4px}
+.panel .sub{color:var(--muted);font-size:.92rem;margin:0 0 6px}
+.side{font:700 .78rem var(--f-ui);letter-spacing:.16em;text-transform:uppercase;color:var(--amber);margin:12px 0 6px}
+.drow{border-top:1px solid var(--line);padding:9px 0;display:grid;gap:6px}
+.drow.playing .dt{color:var(--amber)}
+.drow.special .dt{color:var(--gold)}
+.dhead{display:grid;grid-template-columns:auto minmax(0,1fr);column-gap:10px}
+.dcode{grid-row:span 2;align-self:center;font:700 1.1rem var(--f-type);color:var(--amber)}
+.dt{font:700 .95rem/1.2 var(--f-type);overflow-wrap:anywhere}
+.da{font:400 .82rem var(--f-type);color:var(--muted)}
+.dtools{display:flex;flex-wrap:wrap;gap:6px;align-items:center}
+.tool{font:600 .74rem var(--f-ui);letter-spacing:.07em;text-transform:uppercase;color:var(--cream);background:transparent;border:1px solid rgba(243,231,204,.32);border-radius:999px;padding:3px 10px;cursor:pointer;text-decoration:none;line-height:1.35}
+.tool:hover{border-color:var(--amber);color:var(--amber)}
+.tool.fb{border-color:var(--fb);color:#9fbaf0}
+.tool.fb.direct{background:var(--fb);color:#fff}
+.here{font:600 .78rem var(--f-ui);letter-spacing:.06em;text-transform:uppercase;color:var(--gold)}
+.fname{flex-basis:100%;font:400 .76rem var(--f-type);color:#8fd19e;overflow-wrap:anywhere}
+.drow input[type=file]{position:absolute;width:1px;height:1px;opacity:0;pointer-events:none}
+.linkrow{display:flex;gap:6px;flex-wrap:wrap}
+.linkrow input{flex:1 1 170px;min-width:0;font:400 .82rem var(--f-type);color:var(--cream);background:#140e0b;border:1px solid var(--line);border-radius:6px;padding:5px 8px}
+.linkrow input:focus-visible{outline:3px solid var(--amber);outline-offset:1px}
+.btn{font:600 .9rem var(--f-ui);letter-spacing:.08em;text-transform:uppercase;color:var(--cream);background:transparent;border:1px solid rgba(243,231,204,.4);border-radius:6px;padding:6px 14px;cursor:pointer}
+.btn:disabled{opacity:.4;cursor:default}
+.row{display:flex;gap:12px;align-items:center;flex-wrap:wrap;margin-top:10px}
+.row input[type=range]{accent-color:var(--amber);width:170px}
+.np{font:700 .95rem var(--f-type);overflow-wrap:anywhere}
+.steps{margin:6px 0 0;padding-left:1.3em;display:grid;gap:6px}
+.note{color:var(--muted);font-size:.9rem;margin:12px 0 0}
+
+/* Cumpleaños */
+.bday{position:fixed;z-index:14;left:50%;top:calc(58px + env(safe-area-inset-top,0px));transform:translateX(-50%);width:min(560px,calc(100vw - 32px));text-align:center;background:rgba(42,18,10,.9);border:2px solid var(--gold);border-radius:18px;padding:10px 16px 12px;box-shadow:0 0 0 4px rgba(232,196,106,.18),0 18px 40px rgba(0,0,0,.6);transition:opacity .5s,transform .5s}
+.bday.off{opacity:0;transform:translate(-50%,-12px);pointer-events:none}
+@media (min-width:1000px){.bday{left:max(24px,2.5vw);top:30%;transform:none;width:min(390px,27vw)}.bday.off{transform:translateY(-12px)}}
+.bday small{display:block;font:700 .8rem var(--f-ui);letter-spacing:.18em;text-transform:uppercase;color:var(--gold)}
+.bday h2{margin:2px 0 4px;font:400 clamp(1.25rem,4.4vw,2rem)/1.15 var(--f-display);color:#fff3d6;text-shadow:0 3px 0 #8a2a1e;text-wrap:balance}
+.bday p{margin:0;min-height:1.5em;font:700 clamp(1rem,3.4vw,1.3rem) var(--f-type);color:var(--amber)}
+
+.dock{position:fixed;left:0;right:0;bottom:calc(62px + env(safe-area-inset-bottom,0px));display:flex;flex-direction:column;align-items:center;gap:8px;pointer-events:none;z-index:15;padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px))}
+.toast{max-width:min(460px,100%);background:var(--glass);border:1px solid var(--line);border-radius:10px;padding:8px 14px;font-size:.98rem;text-align:center;transition:opacity .3s,transform .3s;backdrop-filter:blur(6px);-webkit-backdrop-filter:blur(6px)}
+.toast.off{opacity:0;transform:translateY(8px)}
+.fbpill{pointer-events:auto;max-width:min(460px,100%);background:var(--fb);color:#fff;text-decoration:none;font:600 .95rem var(--f-ui);letter-spacing:.04em;border-radius:999px;padding:9px 18px;box-shadow:0 8px 22px rgba(0,0,0,.55);text-align:center;overflow-wrap:anywhere}
+.fbpill:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
+
+/* Vellonera */
+.xbulb{animation:chase 2.4s infinite}
+@keyframes chase{0%,49%{opacity:1}50%,100%{opacity:.25}}
+#archGlow{opacity:.55;transition:opacity .6s}
+.playing #archGlow{opacity:1;animation:pulse .87s ease-in-out infinite alternate}
+@keyframes pulse{from{opacity:.65}to{opacity:1}}
+#spkGlow{opacity:.15;transition:opacity .6s}
+.playing #spkGlow{opacity:1;animation:beat .43s ease-in-out infinite alternate}
+@keyframes beat{from{opacity:.5}to{opacity:1}}
+#winGlow{opacity:.4;transition:opacity .8s}
+.playing #winGlow{opacity:1}
+.key,.slot,a.strip{cursor:pointer}
+.key.hit rect{fill:var(--amber)}
+.key:focus-visible rect,.slot:focus-visible rect.plate,a.strip:focus-visible rect.bg{stroke:var(--amber);stroke-width:4}
+.key:focus,.slot:focus,a.strip:focus{outline:none}
+a.strip:hover rect.bg{fill:#fff8e6}
+a.strip.special rect.bg{fill:#f5d987}
+a.strip.special:hover rect.bg{fill:#ffe9a8}
+a.strip.on rect.bg{fill:#ffe2a6}
+.special-glow{animation:chase 1.2s infinite}
+.slot.nudge{animation:nudge .45s}
+@keyframes nudge{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
+@media (prefers-reduced-motion:reduce){.xbulb,.playing #archGlow,.playing #spkGlow,.slot.nudge,.special-glow{animation:none}}
+</style>
+</head>
+<body>
+
+
+<div class="scene">
+  <!-- el colmado: llena toda la pantalla -->
+  <svg id="room" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <defs>
+      <linearGradient id="wallG" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2c1d14"/><stop offset="1" stop-color="#4b3322"/></linearGradient>
+      <radialGradient id="lampR" gradientUnits="userSpaceOnUse" cx="800" cy="330" r="760"><stop offset="0" stop-color="#ffcf7a" stop-opacity=".42"/><stop offset=".45" stop-color="#ffb04a" stop-opacity=".12"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+      <linearGradient id="floorShade" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity=".15"/></linearGradient>
+      <radialGradient id="vign" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".7"/></radialGradient>
+    </defs>
+    <rect width="1600" height="640" fill="url(#wallG)"/>
+    <g id="planks" stroke="#000" stroke-opacity=".22" stroke-width="2"></g>
+    <rect y="520" width="1600" height="120" fill="#2a1a12"/>
+    <rect y="512" width="1600" height="10" fill="#6b4a2a"/>
+    <g id="floor"></g>
+    <rect y="640" width="1600" height="360" fill="url(#floorShade)"/>
+    <rect y="636" width="1600" height="6" fill="#1a110c"/>
+    <g transform="rotate(-2 330 190)">
+      <rect x="170" y="140" width="320" height="96" rx="6" fill="#efe2c4"/>
+      <rect x="170" y="140" width="320" height="96" rx="6" fill="none" stroke="#c8372d" stroke-width="4"/>
+      <text x="330" y="188" text-anchor="middle" font-family="Shrikhand, Georgia, serif" font-size="34" fill="#c8372d">Colmado</text>
+      <text x="330" y="220" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="17" letter-spacing="2" fill="#2a1a12">LA ESQUINA · CERVEZA FRÍA</text>
+    </g>
+    <rect x="1220" y="170" width="120" height="150" fill="#efe2c4"/>
+    <rect x="1220" y="170" width="120" height="36" fill="#c8372d"/>
+    <text x="1280" y="196" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="22" fill="#efe2c4">DICIEMBRE</text>
+    <text x="1280" y="240" text-anchor="middle" font-family="Courier Prime, monospace" font-weight="700" font-size="30" fill="#2a1a12">1976</text>
+    <g id="calGrid" stroke="#bda98a" stroke-width="1.2"></g>
+    <rect x="110" y="380" width="360" height="12" fill="#5a3a20"/>
+    <g id="bottles"></g>
+    <path d="M-20 40 Q200 120 400 50 Q600 -10 800 60 Q1000 120 1200 50 Q1400 -10 1620 60" stroke="#111" stroke-width="3" fill="none"/>
+    <g id="xlights"></g>
+    <rect width="1600" height="1000" fill="url(#lampR)"/>
+    <rect width="1600" height="1000" fill="url(#vign)"/>
+  </svg>
+
+  <!-- la vellonera de madera, en perspectiva -->
+  <svg id="jb" viewBox="20 100 720 1030" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Vellonera antigua de madera con arco iluminado, cambiador de discos, panel de fichas, monedero y bocina">
+    <defs>
+      <linearGradient id="woodF" x1="0" x2="1"><stop offset="0" stop-color="#4a240f"/><stop offset=".3" stop-color="#8a4c26"/><stop offset=".62" stop-color="#6e3a1c"/><stop offset="1" stop-color="#3f1e0c"/></linearGradient>
+      <linearGradient id="woodS" x1="0" x2="1"><stop offset="0" stop-color="#3a1b0b"/><stop offset="1" stop-color="#1f0e06"/></linearGradient>
+      <linearGradient id="shadeV" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".1"/><stop offset=".3" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></linearGradient>
+      <linearGradient id="chrome" x1="0" x2="1"><stop offset="0" stop-color="#8f8a7f"/><stop offset=".45" stop-color="#f4f0e4"/><stop offset=".7" stop-color="#b9b3a5"/><stop offset="1" stop-color="#7d786d"/></linearGradient>
+      <linearGradient id="chromeV" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f4f0e4"/><stop offset="1" stop-color="#7d786d"/></linearGradient>
+      <linearGradient id="brass" x1="0" x2="1"><stop offset="0" stop-color="#8a6a2e"/><stop offset=".45" stop-color="#f6dc98"/><stop offset="1" stop-color="#8f6f30"/></linearGradient>
+      <linearGradient id="amber" x1="0" x2="1"><stop offset="0" stop-color="#e06a1c"/><stop offset=".5" stop-color="#ffd27a"/><stop offset="1" stop-color="#e06a1c"/></linearGradient>
+      <linearGradient id="ivory" x1="0" x2="1"><stop offset="0" stop-color="#d9c9a2"/><stop offset=".5" stop-color="#f5ebd2"/><stop offset="1" stop-color="#c9b78e"/></linearGradient>
+      <linearGradient id="creamG" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f7ecd4"/><stop offset="1" stop-color="#dcc79c"/></linearGradient>
+      <linearGradient id="winBg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3b1c12"/><stop offset="1" stop-color="#110b08"/></linearGradient>
+      <radialGradient id="glowG" cx=".5" cy=".55" r=".6"><stop offset="0" stop-color="#f0a23a" stop-opacity=".6"/><stop offset="1" stop-color="#f0a23a" stop-opacity="0"/></radialGradient>
+      <radialGradient id="ampG" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#ffb347" stop-opacity=".95"/><stop offset="1" stop-color="#c8372d" stop-opacity="0"/></radialGradient>
+      <radialGradient id="coinG" cx=".35" cy=".35" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#cfcbc1"/><stop offset="1" stop-color="#7d796f"/></radialGradient>
+      <radialGradient id="shadowG" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#000" stop-opacity=".75"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
+      <linearGradient id="glassG" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset=".35" stop-color="#fff" stop-opacity=".03"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
+      <pattern id="diamond" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M8 0 L16 8 L8 16 L0 8 Z" fill="none" stroke="#cfc9ba" stroke-width="1.6"/></pattern>
+      <filter id="blur8" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="8"/></filter>
+      <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 .1  0 0 0 0 .05  0 0 0 0 .02  0 0 0 .55 0"/></filter>
+      <clipPath id="frontClip"><path d="M90 1100 L90 430 A260 260 0 0 1 610 430 L610 1100 Z"/></clipPath>
+      <clipPath id="archClip"><path d="M150 620 L150 420 A200 200 0 0 1 550 420 L550 620 Z"/></clipPath>
+      <clipPath id="winClip"><rect x="74" y="114" width="452" height="312" rx="20"/></clipPath>
+    </defs>
+
+    <ellipse cx="400" cy="1100" rx="370" ry="40" fill="url(#shadowG)"/>
+
+    <!-- volumen: costado y techo curvo -->
+    <path d="M244.4 192.4 L334.4 152.4 A260 260 0 0 1 700 390 L700 1060 L610 1100 L610 430 A260 260 0 0 0 244.4 192.4 Z" fill="url(#woodS)"/>
+    <path d="M334.4 152.4 A260 260 0 0 1 700 390" fill="none" stroke="url(#chrome)" stroke-width="4"/>
+    <path d="M610 1082 L700 1042 L700 1060 L610 1100 Z" fill="#6b665c"/>
+    <g stroke="#000" stroke-opacity=".22" stroke-width="2"><line x1="635" y1="430" x2="635" y2="1088"/><line x1="668" y1="410" x2="668" y2="1073"/></g>
+
+    <!-- frente de madera -->
+    <path d="M90 1100 L90 430 A260 260 0 0 1 610 430 L610 1100 Z" fill="url(#woodF)"/>
+    <g clip-path="url(#frontClip)">
+      <g id="grainLines" fill="none" stroke="#2a1206"></g>
+      <rect x="90" y="160" width="520" height="940" fill="url(#shadeV)"/>
+      <rect x="90" y="160" width="520" height="940" filter="url(#grain)" opacity=".5"/>
+    </g>
+    <path d="M90 1100 L90 430 A260 260 0 0 1 610 430 L610 1100 Z" fill="none" stroke="url(#chrome)" stroke-width="7" stroke-linejoin="round"/>
+
+    <!-- arco iluminado -->
+    <path id="archGlow" d="M112 432 A238 238 0 0 1 588 432" fill="none" stroke="#ffb347" stroke-width="30" filter="url(#blur8)"/>
+    <path d="M112 432 A238 238 0 0 1 588 432" fill="none" stroke="url(#amber)" stroke-width="18"/>
+    <g id="archRibs" stroke="#8a4a1a" stroke-width="2" opacity=".55"></g>
+    <path d="M100 432 A250 250 0 0 1 600 432" fill="none" stroke="url(#chrome)" stroke-width="3"/>
+    <path d="M124 432 A226 226 0 0 1 576 432" fill="none" stroke="url(#chrome)" stroke-width="3"/>
+
+    <!-- columnas de marfil -->
+    <rect x="96" y="440" width="26" height="638" rx="10" fill="url(#ivory)"/>
+    <rect x="578" y="440" width="26" height="638" rx="10" fill="url(#ivory)"/>
+    <g id="flutes" stroke="#a8946a" stroke-width="1.2" opacity=".7"></g>
+
+    <!-- ventana en arco con el cambiador -->
+    <path d="M150 620 L150 420 A200 200 0 0 1 550 420 L550 620 Z" fill="url(#winBg)"/>
+    <g clip-path="url(#archClip)">
+      <g id="sunburst" stroke="#e8c46a" stroke-width="2" opacity=".35"></g>
+      <text x="350" y="290" text-anchor="middle" font-family="Shrikhand, Georgia, serif" font-size="30" fill="#e8c46a">La Quisqueyana</text>
+      <text x="350" y="318" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="13" letter-spacing="5" fill="#d9c38c">· SINFONOLA DE 45 ·</text>
+      <g transform="translate(160 338) scale(.826) translate(-70 -110)">
+        <g clip-path="url(#winClip)">
+          <rect id="winGlow" x="74" y="114" width="452" height="312" fill="url(#glowG)"/>
+          <line x1="92" y1="147" x2="508" y2="147" stroke="url(#brass)" stroke-width="4" stroke-linecap="round"/>
+          <g id="carriage" transform="translate(300,0)">
+            <rect x="-20" y="139" width="40" height="15" rx="4" fill="url(#brass)"/>
+            <line x1="0" y1="154" x2="0" y2="168" stroke="#d9c38c" stroke-width="3"/>
+            <rect x="-7" y="166" width="14" height="5" rx="2" fill="#d9c38c"/>
+          </g>
+          <rect x="96" y="262" width="408" height="9" rx="3" fill="url(#brass)"/>
+          <g id="rack"></g>
+          <ellipse cx="300" cy="392" rx="112" ry="33" fill="#1b1714"/>
+          <ellipse cx="300" cy="384" rx="104" ry="30" fill="#2e2925" stroke="#4d453e" stroke-width="1.5"/>
+          <g id="play" opacity="0" transform="translate(300 372) scale(1 .3)">
+            <g id="playSpin">
+              <circle r="85" fill="#0c0b0a"/>
+              <circle r="78" fill="none" stroke="#24211f" stroke-width="1.5"/>
+              <circle r="68" fill="none" stroke="#24211f" stroke-width="1.5"/>
+              <circle r="58" fill="none" stroke="#24211f" stroke-width="1.5"/>
+              <circle r="48" fill="none" stroke="#24211f" stroke-width="1.5"/>
+              <path d="M0 0 L82 -22 A85 85 0 0 1 82 22 Z" fill="#fff" opacity=".08"/>
+              <circle id="playLabel" r="31" fill="#c8372d"/>
+              <rect x="-20" y="-12" width="40" height="5" rx="2" fill="#fff" opacity=".75"/>
+              <rect x="-14" y="8" width="28" height="4" rx="2" fill="#fff" opacity=".55"/>
+              <circle r="12" fill="none" stroke="#e8c14a" stroke-width="2.5"/>
+              <rect x="-1.6" y="-12" width="3.2" height="12" fill="#e8c14a"/>
+              <rect x="-1.6" y="-12" width="3.2" height="12" fill="#e8c14a" transform="rotate(120)"/>
+              <rect x="-1.6" y="-12" width="3.2" height="12" fill="#e8c14a" transform="rotate(240)"/>
+              <circle r="4" fill="#e8c14a"/>
+            </g>
+          </g>
+          <circle cx="300" cy="372" r="2.5" fill="#d0d0d0"/>
+          <g id="tonearm" transform="rotate(-38 432 326)">
+            <circle cx="432" cy="326" r="13" fill="url(#brass)"/>
+            <circle cx="432" cy="326" r="5" fill="#5a4520"/>
+            <line x1="432" y1="326" x2="364" y2="362" stroke="#efe6cf" stroke-width="5" stroke-linecap="round"/>
+            <rect x="352" y="356" width="18" height="10" rx="3" fill="#d9c38c" transform="rotate(28 361 361)"/>
+          </g>
+        </g>
+      </g>
+      <path d="M150 620 L150 420 A200 200 0 0 1 550 420 L550 620 Z" fill="url(#glassG)"/>
+      <path d="M160 620 L250 230 L300 230 L205 620 Z" fill="#fff" opacity=".05"/>
+    </g>
+    <path d="M150 620 L150 420 A200 200 0 0 1 550 420 L550 620 Z" fill="none" stroke="url(#chrome)" stroke-width="8" stroke-linejoin="round"/>
+
+    <!-- banda con pantalla -->
+    <rect x="120" y="628" width="460" height="36" rx="10" fill="url(#chrome)"/>
+    <rect x="252" y="633" width="196" height="26" rx="5" fill="#120c09"/>
+    <text id="disp" x="350" y="651.5" text-anchor="middle" font-family="Courier Prime, Courier New, monospace" font-weight="700" font-size="15" letter-spacing="1.2" fill="#ff6a3d">ECHE 5¢</text>
+    <text x="188" y="651" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="12" letter-spacing="2" fill="#3b3730">SELECCIÓN</text>
+    <text x="515" y="651" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="12" letter-spacing="2" fill="#3b3730">5¢ UN DISCO</text>
+
+    <!-- panel de fichas -->
+    <rect x="120" y="670" width="460" height="226" rx="14" fill="#1a1310" stroke="url(#chrome)" stroke-width="3"/>
+    <g id="strips"></g>
+
+    <!-- consola -->
+    <rect x="120" y="904" width="460" height="70" rx="12" fill="url(#creamG)" stroke="url(#chrome)" stroke-width="3"/>
+    <g class="slot" id="slot" role="button" tabindex="0" aria-label="Echar una moneda de cinco centavos">
+      <rect class="plate" x="134" y="910" width="62" height="58" rx="9" fill="url(#chrome)" stroke="#6b665c" stroke-width="1.5"/>
+      <rect x="162" y="916" width="7" height="32" rx="2.5" fill="#120c09"/>
+      <text x="165" y="962" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="11" fill="#2a2620">ECHE 5¢</text>
+    </g>
+    <g id="keys"></g>
+    <rect x="418" y="910" width="150" height="58" rx="9" fill="#120c09" stroke="url(#chrome)" stroke-width="2"/>
+    <text x="493" y="926" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="11" letter-spacing="2" fill="#d9c38c">CRÉDITO</text>
+    <text id="cred" x="493" y="960" text-anchor="middle" font-family="Courier Prime, Courier New, monospace" font-weight="700" font-size="30" fill="#ff6a3d">0</text>
+
+    <!-- bocina con rejilla de cromo -->
+    <rect x="134" y="982" width="432" height="92" rx="16" fill="#3a1b0b" stroke="url(#chrome)" stroke-width="3"/>
+    <rect x="146" y="992" width="408" height="72" rx="10" fill="#1a0c06"/>
+    <rect id="spkGlow" x="146" y="992" width="408" height="72" rx="10" fill="url(#ampG)"/>
+    <rect x="146" y="992" width="408" height="72" rx="10" fill="url(#diamond)" opacity=".85"/>
+    <circle cx="350" cy="1028" r="26" fill="url(#creamG)" stroke="url(#chrome)" stroke-width="3"/>
+    <text x="350" y="1035" text-anchor="middle" font-family="Shrikhand, Georgia, serif" font-size="18" fill="#8a2a1e">45</text>
+    <rect x="92" y="1080" width="516" height="20" rx="6" fill="url(#chrome)"/>
+
+    <!-- mano con la moneda -->
+    <g transform="translate(50 142)">
+      <g id="hand" transform="translate(-320,0)" opacity="0">
+        <rect x="-180" y="774" width="90" height="40" rx="7" fill="#efe2c0"/>
+        <rect x="-96" y="780" width="168" height="27" rx="13" fill="#8a5636"/>
+        <ellipse cx="80" cy="792" rx="23" ry="15" fill="#8a5636"/>
+        <ellipse cx="78" cy="778" rx="12" ry="6" fill="#7a4a2f"/>
+        <g id="handCoin"><ellipse cx="104" cy="790" rx="4" ry="11" fill="url(#coinG)" stroke="#6b675e" stroke-width=".8"/></g>
+      </g>
+    </g>
+  </svg>
+</div>
+<canvas id="confetti" aria-hidden="true"></canvas>
+
+<div class="bday off" id="bday" aria-live="polite">
+  <small>Disco especial · A7</small>
+  <h2>¡Feliz cumpleaños, profesor Manuel Inoa!</h2>
+  <p id="bdLine">♪</p>
+</div>
+
+<div class="hud tl"><div class="brand">La Vellonera</div></div>
+<nav class="hud tr" aria-label="Menús">
+  <button class="mbtn" type="button" data-menu="mDiscos" aria-expanded="false" aria-controls="mDiscos">Discos</button>
+  <button class="mbtn" type="button" data-menu="mSonido" aria-expanded="false" aria-controls="mSonido">Sonido</button>
+  <button class="mbtn" type="button" data-menu="mAyuda" aria-expanded="false" aria-controls="mAyuda">Ayuda</button>
+</nav>
+<div class="hud bl"><button class="fab" id="zoomBtn" type="button">Acercar fichas</button></div>
+<div class="hud br"><button class="fab" id="fsBtn" type="button">Pantalla completa</button></div>
+
+<section class="panel" id="mDiscos" hidden aria-label="Discos">
+  <h2>Discos de 45</h2>
+  <p class="sub">A7 es el disco especial de cumpleaños y suena aquí mismo. Los demás abren su merengue en Facebook, o suenan aquí si les cargas un MP3.</p>
+  <div id="discList"></div>
+</section>
+<section class="panel" id="mSonido" hidden aria-label="Sonido">
+  <h2>Sonido</h2>
+  <div class="side">Ahora suena</div>
+  <div class="np" id="npText">Nada todavía</div>
+  <div class="row">
+    <button class="btn" id="stopBtn" type="button" disabled>Detener</button>
+    <label for="vol">Volumen</label>
+    <input id="vol" type="range" min="0" max="1" step="0.01" value="0.85">
+  </div>
+  <p class="note">El volumen controla la vellonera, el disco de cumpleaños y tus MP3. El sonido de Facebook se controla en su pestaña.</p>
+</section>
+<section class="panel" id="mAyuda" hidden aria-label="Cómo funciona">
+  <h2>Cómo funciona</h2>
+  <ol class="steps">
+    <li>Toca la ranura de <b>5¢</b> para echar la moneda. Cada moneda da un disco.</li>
+    <li>Toca una ficha del panel, o marca la letra y el número en las teclas. Para el cumpleaños: <b>A</b> y <b>7</b>.</li>
+    <li>La máquina saca el 45 del estante, lo acuesta en el plato y baja el brazo.</li>
+    <li>A7 suena aquí mismo. Los demás discos abren el merengue original en Facebook.</li>
+  </ol>
+  <p class="note">En el teléfono, el primer toque en el panel acerca la cámara a las fichas; «Ver máquina» la aleja.</p>
+</section>
+
+<div class="dock">
+  <a class="fbpill" id="fbPill" href="https://www.facebook.com/raynier.03/reels/" target="_blank" rel="noopener" hidden>Oír en Facebook ↗</a>
+  <div class="toast off" id="toast" role="status" aria-live="polite"></div>
+</div>
+
+<script>
+(function(){
+const SONGS=[
+ {id:'A1',t:"Salsa pa' tu lechón",a:'Johnny Ventura',tag:'Navidad',c:'#c8372d'},
+ {id:'A2',t:'Llegó la Navidad',a:'Félix del Rosario',tag:'Navidad',c:'#2f7d4f'},
+ {id:'A3',t:'Fiesta y fiesta',a:'Dioni Fernández',tag:'Navidad',c:'#d9a227'},
+ {id:'A4',t:'Qué dirán los vecinos',a:'Luis Ovalle',tag:'Navidad',c:'#2c5aa0'},
+ {id:'A5',t:'Trulla navideña',a:'Conjunto Quisqueya',tag:'Navidad',c:'#b03a6f'},
+ {id:'A6',t:'Bebo hoy, bebo mañana',a:'Conjunto Quisqueya',tag:'Navidad',c:'#e06a2c'},
+ {id:'A7',t:'Cumpleaños feliz',a:'Para el prof. Manuel Inoa',tag:'Especial',c:'#e8c46a',bday:true},
+ {id:'B1',t:'El pavo y el burro',a:'Los Hijos del Rey',tag:'Navidad',c:'#5a8f2e'},
+ {id:'B2',t:'Dominicano ausente',a:'El Zafiro',tag:'Navidad',c:'#7a3fa0'},
+ {id:'B3',t:'Viejo año',a:'Rasputín',tag:'Navidad',c:'#1f8a8a'},
+ {id:'B4',t:'El vecino está borracho',a:'Johnny Ventura',tag:'Navidad',c:'#c25b2a'},
+ {id:'B5',t:'Patacón pisao',a:'Johnny Ventura',tag:'Éxito',c:'#e0c341'},
+ {id:'B6',t:'El barbarazo',a:'Wilfrido Vargas',tag:'Éxito',c:'#3a6fb5'},
+ {id:'B7',t:'El mangue',a:'Cheché Abreu',tag:'Éxito',c:'#d14b8f',fb:'https://www.facebook.com/reel/1646606980181533'}
+];
+const byId={};SONGS.forEach(s=>byId[s.id]=s);
+const FB_PAGE='https://www.facebook.com/raynier.03/reels/';
+let fbLinks={};
+try{fbLinks=JSON.parse(localStorage.getItem('vellonera-fb')||'{}')||{};}catch(e){fbLinks={};}
+const saveLinks=()=>{try{localStorage.setItem('vellonera-fb',JSON.stringify(fbLinks));}catch(e){}};
+const directLink=id=>fbLinks[id]||(byId[id]&&byId[id].fb)||'';
+const linkFor=id=>byId[id]&&byId[id].bday?'#cumple':(directLink(id)||FB_PAGE);
+const validFb=u=>/^https:\/\/(www\.|m\.|web\.)?(facebook\.com|fb\.watch)\//i.test(u.trim());
+
+const $=s=>document.querySelector(s);
+const NS='http://www.w3.org/2000/svg';
+const RM=window.matchMedia&&matchMedia('(prefers-reduced-motion: reduce)').matches;
+const wait=ms=>new Promise(r=>setTimeout(r,RM?Math.min(ms,60):ms));
+const ease=p=>p<.5?2*p*p:1-Math.pow(-2*p+2,2)/2;
+function tween(dur,fn){return new Promise(res=>{if(RM){fn(1);res();return;}const t0=performance.now();const f=now=>{const p=Math.min(1,(now-t0)/dur);fn(ease(p));if(p<1)requestAnimationFrame(f);else res();};requestAnimationFrame(f);});}
+function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;parent.appendChild(e);return e;}
+const jb=$('#jb');
+
+/* ---------- el colmado ---------- */
+(function room(){
+ const pl=$('#planks');for(let x=40;x<1600;x+=64)el('line',{x1:x,y1:0,x2:x,y2:512},pl);
+ const fl=$('#floor');const VP=[800,330];const rows=[640,664,694,732,782,846,926,1000];const xs=[];for(let x=-2400;x<=4000;x+=200)xs.push(x);
+ const at=(xb,y)=>VP[0]+(xb-VP[0])*(y-VP[1])/(1000-VP[1]);
+ for(let r=0;r<rows.length-1;r++)for(let c=0;c<xs.length-1;c++){const y0=rows[r],y1=rows[r+1];
+  const pts=[[at(xs[c],y0),y0],[at(xs[c+1],y0),y0],[at(xs[c+1],y1),y1],[at(xs[c],y1),y1]].map(p=>p[0].toFixed(1)+','+p[1]).join(' ');
+  el('polygon',{points:pts,fill:(r+c)%2?'#9c8862':'#2f2219'},fl);}
+ const cg=$('#calGrid');for(let i=0;i<4;i++)el('line',{x1:1232,x2:1328,y1:262+i*14,y2:262+i*14},cg);for(let i=0;i<7;i++)el('line',{x1:1234+i*15.5,x2:1234+i*15.5,y1:256,y2:310},cg);
+ const bt=$('#bottles');[['#6b3d14',130],['#2f6b3a',170],['#7a5a1c',210],['#3f2a12',250],['#2f6b3a',290],['#8a2f22',330],['#6b3d14',370],['#7a5a1c',410]].forEach(([c,x],i)=>{const h=58+(i%3)*14;el('rect',{x:x,y:380-h,width:26,height:h,rx:6,fill:c},bt);el('rect',{x:x+9,y:380-h-20,width:8,height:22,fill:c},bt);});
+ const xl=$('#xlights');const cols=['#e2402f','#4cbf6b','#f0a23a','#3a8fd9'];
+ const tmp=el('path',{d:'M-20 40 Q200 120 400 50 Q600 -10 800 60 Q1000 120 1200 50 Q1400 -10 1620 60',fill:'none'},xl);const L=tmp.getTotalLength();
+ for(let i=0;i<34;i++){const p=tmp.getPointAtLength(L*i/33);const b=el('ellipse',{cx:p.x,cy:p.y+11,rx:8,ry:11,fill:cols[i%4],class:'xbulb'},xl);b.style.animationDelay=(i%2?1.2:0)+'s';el('rect',{x:p.x-4,y:p.y-2,width:8,height:6,fill:'#333'},xl);}
+})();
+
+/* ---------- piezas de la máquina ---------- */
+function rackX(i){return 116+i*28.5;}
+(function build(){
+ let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
+ const gl=$('#grainLines');
+ for(let k=0;k<46;k++){const x0=92+k*11.4+rnd()*6;let d=`M${x0.toFixed(1)} 160`;for(let y=220;y<=1100;y+=60){d+=` L${(x0+Math.sin(y/90+k)*3.5+rnd()*2).toFixed(1)} ${y}`;}el('path',{d,'stroke-width':(.8+rnd()*1.6).toFixed(2),opacity:(.08+rnd()*.14).toFixed(2)},gl);}
+ const ribs=$('#archRibs');for(let i=1;i<24;i++){const a=Math.PI*(1-i/24);const c=Math.cos(a),s=Math.sin(a);el('line',{x1:350+229*c,y1:432-229*s,x2:350+247*c,y2:432-247*s},ribs);}
+ const fl=$('#flutes');[96,578].forEach(x=>{for(let k=1;k<5;k++)el('line',{x1:x+k*5.2,y1:452,x2:x+k*5.2,y2:1066},fl);});
+ const sb=$('#sunburst');for(let i=0;i<=18;i++){const a=Math.PI*(i/18);el('line',{x1:350+40*Math.cos(a),y1:420-40*Math.sin(a),x2:350+210*Math.cos(a),y2:420-210*Math.sin(a)},sb);}
+ const rack=$('#rack');
+ SONGS.forEach((s,i)=>{const x=rackX(i);const g=el('g',{id:'rk-'+s.id},rack);
+  el('rect',{x:x-5,y:170,width:10,height:92,rx:2.5,fill:'#0d0c0b'},g);
+  el('rect',{x:x-5,y:203,width:10,height:26,fill:s.c},g);
+  el('rect',{x:x-2,y:173,width:1.4,height:86,fill:'#fff',opacity:.16},g);
+  el('text',{x:x,y:186,'text-anchor':'middle','font-family':'Barlow Condensed, Arial Narrow, sans-serif','font-size':8,'font-weight':700,fill:'#d9c38c'},g,s.id);});
+ const keys=$('#keys');
+ const mk=(k,x,y,w,label,aria)=>{const g=el('g',{class:'key','data-k':k,role:'button',tabindex:0,'aria-label':aria},keys);
+  el('rect',{x:x,y:y,width:w,height:24,rx:5,fill:'#fbf4e2',stroke:'#a88a52','stroke-width':1.5},g);
+  el('text',{x:x+w/2,y:y+17,'text-anchor':'middle','font-family':'Courier Prime, Courier New, monospace','font-weight':700,'font-size':label.length>2?10.5:15,fill:'#2a1a12'},g,label);};
+ mk('A',206,910,34,'A','Letra A');mk('B',244,910,34,'B','Letra B');mk('X',282,910,128,'BORRAR','Borrar selección');
+ for(let n=1;n<=7;n++)mk(String(n),206+(n-1)*29.4,941,26.5,String(n),'Número '+n);
+})();
+function buildStrips(){
+ const layer=$('#strips');layer.innerHTML='';
+ const colA=SONGS.filter(s=>s.id[0]==='A'),colB=SONGS.filter(s=>s.id[0]==='B');
+ [colA,colB].forEach((list,c)=>{for(let r=0;r<7;r++){const s=list[r];const x=130+c*222,y=677+r*31.2;
+  if(!s)continue;
+  const a=el('a',{href:linkFor(s.id),target:s.bday?'_self':'_blank',rel:'noopener',class:'strip'+(s.bday?' special':''),'data-id':s.id,'aria-label':`${s.id}: ${s.t}, ${s.a}`},layer);
+  el('rect',{class:'bg',x:x,y:y,width:212,height:28,rx:3,fill:'#f6ecd4'},a);
+  el('rect',{x:x,y:y,width:212,height:3.5,rx:1,fill:s.bday?'#8a2a1e':(c?'#2f7d4f':'#c8372d')},a);
+  el('text',{x:x+7,y:y+20,'font-family':'Courier Prime, monospace','font-weight':700,'font-size':14.5,fill:s.bday?'#8a2a1e':(c?'#2f7d4f':'#c8372d')},a,s.id);
+  const tt=el('text',{x:x+35,y:y+14.5,'font-family':'Courier Prime, monospace','font-weight':700,'font-size':12,fill:'#2a1a12'},a,s.t.toUpperCase());
+  if(s.t.length>19){tt.setAttribute('textLength',170);tt.setAttribute('lengthAdjust','spacingAndGlyphs');}
+  const at=el('text',{x:x+35,y:y+25,'font-family':'Courier Prime, monospace','font-size':10,fill:s.bday?'#6b2a14':'#6b5440'},a,s.a);
+  if(s.a.length>24){at.setAttribute('textLength',170);at.setAttribute('lengthAdjust','spacingAndGlyphs');}
+  if(s.bday)el('circle',{class:'special-glow',cx:x+202,cy:y+14,r:4,fill:'#c8372d'},a);
+ }});
+}
+
+/* ---------- cámara ---------- */
+const VIEWS={full:[20,100,720,1030],panel:[112,620,476,360],win:[128,206,444,428]};
+let vb=VIEWS.full.slice(),view='full';
+function cam(name,dur){const to=VIEWS[name],from=vb.slice();view=name;updZoomBtn();return tween(dur||700,p=>{vb=from.map((v,i)=>v+(to[i]-v)*p);jb.setAttribute('viewBox',vb.map(n=>n.toFixed(1)).join(' '));});}
+const small=()=>{const r=jb.getBoundingClientRect();return Math.min(r.width/VIEWS.full[2],r.height/VIEWS.full[3])<.85;};
+function updZoomBtn(){$('#zoomBtn').textContent=view==='full'?'Acercar fichas':'Ver máquina';}
+$('#zoomBtn').addEventListener('click',()=>cam(view==='full'?'panel':'full'));
+const fsBtn=$('#fsBtn');
+if(!document.documentElement.requestFullscreen)fsBtn.hidden=true;
+fsBtn.addEventListener('click',()=>{try{if(document.fullscreenElement){document.exitFullscreen();}else{const p=document.documentElement.requestFullscreen();if(p&&p.catch)p.catch(()=>toast('Aquí no se puede abrir en pantalla completa.'));}}catch(e){toast('Aquí no se puede abrir en pantalla completa.');}});
+document.addEventListener('fullscreenchange',()=>{fsBtn.textContent=document.fullscreenElement?'Salir de pantalla completa':'Pantalla completa';});
+
+/* ---------- audio ---------- */
+let ctx=null,master=null,noiseBuf=null,crackleBuf=null,vol=0.85;
+function ac(){
+ if(!ctx){try{ctx=new (window.AudioContext||window.webkitAudioContext)();}catch(e){return null;}
+  master=ctx.createGain();master.gain.value=vol;
+  const comp=ctx.createDynamicsCompressor();comp.threshold.value=-14;comp.ratio.value=4;master.connect(comp);comp.connect(ctx.destination);
+  const n=ctx.sampleRate*2;noiseBuf=ctx.createBuffer(1,n,ctx.sampleRate);const d=noiseBuf.getChannelData(0);for(let i=0;i<n;i++)d[i]=Math.random()*2-1;
+  const m=ctx.sampleRate*4;crackleBuf=ctx.createBuffer(1,m,ctx.sampleRate);const c=crackleBuf.getChannelData(0);let prev=0;
+  for(let i=0;i<m;i++){prev=prev*.96+(Math.random()*2-1)*.04;c[i]=prev*.2;if(Math.random()<.0003){const a=(Math.random()*2-1)*.6;for(let k=0;k<30&&i+k<m;k++)c[i+k]+=a*Math.exp(-k/5);}}}
+ if(ctx.state==='suspended')ctx.resume();return ctx;
+}
+const mf=m=>440*Math.pow(2,(m-69)/12);
+function envG(out,t,a,peak,d){const g=ctx.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+a);g.gain.exponentialRampToValueAtTime(.0008,t+a+d);g.connect(out);return g;}
+function nz(t,d,type,f,q,peak,out){const s=ctx.createBufferSource();s.buffer=noiseBuf;const fl=ctx.createBiquadFilter();fl.type=type;fl.frequency.value=f;fl.Q.value=q;const g=envG(out||master,t,.002,peak,d);s.connect(fl);fl.connect(g);s.start(t,Math.random()*1.5);s.stop(t+d+.05);}
+function low(t,v,out){const o=ctx.createOscillator();o.type='sine';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(68,t+.14);const g=envG(out,t,.003,.75*v,.28);o.connect(g);o.start(t);o.stop(t+.36);nz(t,.03,'lowpass',900,.7,.25*v,out);}
+function rim(t,v,out){nz(t,.045,'bandpass',3400,1.8,.5*v,out);const o=ctx.createOscillator();o.type='triangle';o.frequency.value=780;const g=envG(out,t,.001,.07*v,.035);o.connect(g);o.start(t);o.stop(t+.06);}
+function guira(t,v,long,out){nz(t,long?.12:.035,'highpass',6500,.7,.16*v,out);}
+function bassN(t,m,d,out){const fl=ctx.createBiquadFilter();fl.type='lowpass';fl.frequency.value=800;const g=envG(out,t,.006,.42,d);fl.connect(g);['triangle','sine'].forEach(tp=>{const o=ctx.createOscillator();o.type=tp;o.frequency.value=mf(m);o.connect(fl);o.start(t);o.stop(t+d+.1);});}
+function stab(t,ms,d,out,v){const fl=ctx.createBiquadFilter();fl.type='lowpass';fl.frequency.setValueAtTime(3000,t);fl.frequency.exponentialRampToValueAtTime(900,t+d);const g=envG(out,t,.004,.05*v,d);fl.connect(g);ms.forEach(m=>{const o=ctx.createOscillator();o.type='square';o.frequency.value=mf(m);o.connect(fl);o.start(t);o.stop(t+d+.1);});}
+function acc(t,m,d,out,v){const fl=ctx.createBiquadFilter();fl.type='lowpass';fl.frequency.value=2300;const g=ctx.createGain();const pk=.05*v;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(pk,t+.01);g.gain.setValueAtTime(pk,t+Math.max(.02,d));g.gain.linearRampToValueAtTime(0,t+d+.04);fl.connect(g);g.connect(out);[-8,8].forEach(dt=>{const o=ctx.createOscillator();o.type='square';o.frequency.value=mf(m);o.detune.value=dt;o.connect(fl);o.start(t);o.stop(t+d+.08);});}
+function sax(t,m,d,out,v){
+ const f=mf(m);const fl=ctx.createBiquadFilter();fl.type='lowpass';fl.Q.value=2;fl.frequency.setValueAtTime(700,t);fl.frequency.linearRampToValueAtTime(2600,t+.04);fl.frequency.linearRampToValueAtTime(1500,t+Math.max(.06,d));
+ const g=ctx.createGain();const pk=.12*v;g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(pk,t+.025);g.gain.linearRampToValueAtTime(pk*.78,t+Math.max(.05,d*.6));g.gain.linearRampToValueAtTime(0,t+d+.06);
+ fl.connect(g);g.connect(out);
+ const lfo=ctx.createOscillator();lfo.frequency.value=5.6;const lg=ctx.createGain();lg.gain.setValueAtTime(0,t);lg.gain.linearRampToValueAtTime(f*.007,t+Math.min(.25,Math.max(.05,d)));lfo.connect(lg);
+ [['sawtooth',0],['square',6]].forEach(([tp,dt])=>{const o=ctx.createOscillator();o.type=tp;o.frequency.value=f;o.detune.value=dt;lg.connect(o.frequency);o.connect(fl);o.start(t);o.stop(t+d+.1);});
+ lfo.start(t);lfo.stop(t+d+.1);
+}
+function clink(){if(!ac())return;const t=ctx.currentTime;[[2637,0],[3951,0],[2349,.13],[3520,.13]].forEach(([f,dt])=>{const o=ctx.createOscillator();o.type='sine';o.frequency.value=f;const g=envG(master,t+dt,.002,.12,.3);o.connect(g);o.start(t+dt);o.stop(t+dt+.4);});for(let i=0;i<5;i++)nz(t+.25+i*.07,.03,'bandpass',4000-i*350,4,.14/(i+1));}
+function clickSnd(){if(!ac())return;nz(ctx.currentTime,.02,'bandpass',1800,2,.3);}
+function motor(dur){if(!ac())return;const t=ctx.currentTime;const o=ctx.createOscillator();o.type='sawtooth';o.frequency.setValueAtTime(46,t);o.frequency.linearRampToValueAtTime(64,t+dur*.5);o.frequency.linearRampToValueAtTime(44,t+dur);const fl=ctx.createBiquadFilter();fl.type='lowpass';fl.frequency.value=280;const g=ctx.createGain();g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(.07,t+.15);g.gain.setValueAtTime(.06,t+dur-.1);g.gain.linearRampToValueAtTime(0,t+dur);o.connect(fl);fl.connect(g);g.connect(master);o.start(t);o.stop(t+dur+.05);}
+function drop(){if(!ac())return;low(ctx.currentTime,.5,master);}
+
+/* ---------- «Cumpleaños feliz» a ritmo de merengue (melodía de dominio público) ---------- */
+const TR=5,ROOT=53; /* en Fa mayor */
+const chordNotes=ch=>{const b=ROOT+12;if(ch===0)return[b,b+4,b+7];if(ch===5)return[b,b+5,b+9];return[b-1,b+2,b+5,b+7];};
+const V={1:[[0,4,69],[4,4,67]],2:[[0,4,72],[4,8,71]],3:[[4,2,67],[6,2,67]],4:[[0,4,69],[4,4,67]],5:[[0,4,74],[4,8,72]],6:[[4,2,67],[6,2,67]],7:[[0,4,79],[4,4,76]],8:[[0,4,72],[4,4,71]],9:[[0,4,69],[4,2,77],[6,2,77]],10:[[0,4,76],[4,4,72]],11:[[0,4,74],[4,8,72]]};
+const VC={1:[0,0],2:[7,7],3:[7,7],4:[7,7],5:[7,0],6:[0,0],7:[0,0],8:[5,5],9:[5,5],10:[0,0],11:[7,0]};
+const PICK=[[4,2,67],[6,2,67]];
+const RIFF={0:[[0,1,72],[1,1,76],[2,2,79],[4,1,76],[5,1,72],[6,2,76]],7:[[0,1,71],[1,1,74],[2,2,79],[4,1,77],[5,1,74],[6,2,71]]};
+const LYR=['Cumpleaños feliz','te deseamos a ti','cumpleaños, profesor Manuel','cumpleaños feliz','¡Que los cumplas feliz!','¡Felicidades, profe Inoa!','¡Feliz cumpleaños, profesor Manuel Inoa!'];
+function bdayChart(){
+ const B=[{sec:'drums',ch:[0,0]},{sec:'drums',ch:[0,0]},{sec:'riff',ch:[0,0],riff:RIFF[0]},{sec:'riff',ch:[7,7],riff:RIFF[7],mel:PICK,lead:'sax',lyr:[[4,0]]}];
+ const verse=lead=>{for(let b=1;b<=11;b++){const bar={sec:'verse',ch:VC[b],mel:V[b],lead};const ly=[];if(b===3)ly.push([4,1]);if(b===6)ly.push([4,2]);if(b===9)ly.push([4,3]);if(ly.length)bar.lyr=ly;B.push(bar);}};
+ verse('sax');
+ B.push({sec:'verse',ch:[0,7],mel:PICK,lead:'acc',lyr:[[4,0]]});
+ verse('acc');
+ for(let j=0;j<8;j++){const ch=j%2?7:0;const bar={sec:'jaleo',ch:[ch,ch]};if(j===2||j===3||j===5||j===6)bar.riff=RIFF[ch];if(j===0)bar.lyr=[[2,4]];if(j===4)bar.lyr=[[0,5]];if(j===7){bar.mel=PICK;bar.lead='both';bar.lyr=[[4,0]];}B.push(bar);}
+ verse('both');
+ B.push({sec:'roll',ch:[0,0]},{sec:'end',ch:[0,0],lyr:[[0,6]]});
+ return B;
+}
+const TAMB=['L','r','r','r','B','r','R','r'];
+let song=null;
+function stepBday(B,s,t,out){
+ const h=()=>t+(Math.random()-.5)*.006;const spb=song.spb;
+ if(B.lyr)B.lyr.forEach(([st,i])=>{if(st===s)setTimeout(()=>showLyric(i),Math.max(0,(t-ctx.currentTime)*1000));});
+ if(B.sec==='end'){if(s===0){low(t,1,out);rim(t,1,out);guira(t,1,true,out);bassN(t,ROOT-12,1,out);stab(t,chordNotes(0),1,out,1.4);sax(t,72+TR,1.2,out,1.1);acc(t,60+TR,1.2,out,1.2);}return;}
+ if(B.sec==='roll'){rim(h(),.3+s*.09,out);if(s===0||s===4)low(t,.6,out);}
+ else{const p=TAMB[s];if(p==='L')low(h(),.55,out);else if(p==='B')low(h(),1,out);else if(p==='R')rim(h(),.9,out);else rim(h(),.45,out);}
+ guira(h(),[1,.35,.6,.4][s%4],s%4===0,out);
+ if(B.sec==='drums')return;
+ const ch=s<4?B.ch[0]:B.ch[1];
+ if(s===0)bassN(t,ROOT-12+B.ch[0],.28,out);
+ if(s===4)bassN(t,B.ch[1]!==B.ch[0]?ROOT-12+B.ch[1]:ROOT-12+B.ch[0]+(B.ch[0]===7?-5:7),.22,out);
+ if(s===2||s===6)stab(t,chordNotes(ch),.11,out,1);
+ if(B.sec==='jaleo'||(B.sec==='verse'&&B.lead==='sax')){const cn=chordNotes(ch).map(m=>m+12);acc(t,cn[[0,2,1,2][s%4]],spb*.85,out,B.sec==='jaleo'?1:.4);}
+ if(B.mel)for(const [st,l,m] of B.mel)if(st===s){const d=l*spb*.94;
+  if(B.lead==='acc')acc(h(),m+TR,d,out,1.7);
+  else if(B.lead==='both'){sax(h(),m+TR,d,out,1);acc(t,m+TR-12,d,out,.9);}
+  else sax(h(),m+TR,d,out,1);}
+ if(B.riff)for(const [st,l,m] of B.riff)if(st===s)sax(h(),m+TR,l*spb*.92,out,.85);
+}
+function playBday(my){
+ const c=ac();const bars=bdayChart();const bpm=138;const spb=60/bpm/4;
+ const bus=c.createGain();bus.connect(master);
+ const cr=c.createBufferSource();cr.buffer=crackleBuf;cr.loop=true;const cg=c.createGain();cg.gain.value=.45;cr.connect(cg);cg.connect(bus);
+ let bi=0,s=0,t=c.currentTime+.1;cr.start(t);
+ song={spb,bus,cr,timer:null};
+ song.timer=setInterval(()=>{while(bi<bars.length&&t<c.currentTime+.25){stepBday(bars[bi],s,t,bus);s++;if(s===8){s=0;bi++;}t+=spb;}if(bi>=bars.length)clearInterval(song.timer);},25);
+ const dur=bars.length*8*spb;
+ endTimer=setTimeout(()=>finish(my),(dur+2.2)*1000);
+ startCelebration();
+}
+function stopSong(){if(!song)return;clearInterval(song.timer);const b=song.bus,cr=song.cr;try{b.gain.setTargetAtTime(0,ctx.currentTime,.05);}catch(e){}setTimeout(()=>{try{cr.stop();b.disconnect();}catch(e){}},400);song=null;}
+
+/* ---------- celebración ---------- */
+const bdayEl=$('#bday');let ledTimer=null;
+function showLyric(i){$('#bdLine').textContent='♪ '+LYR[i]+' ♪';}
+function startCelebration(){
+ bdayEl.classList.remove('off');$('#bdLine').textContent='♪';
+ const msg='   FELIZ CUMPLEAÑOS PROF. MANUEL INOA   ';let k=0;clearInterval(ledTimer);
+ ledTimer=setInterval(()=>{const s=(msg+msg).slice(k,k+16);setDisp(s);k=(k+1)%msg.length;},RM?900:200);
+ confettiOn(true);
+}
+function stopCelebration(){clearInterval(ledTimer);ledTimer=null;confettiOn(false);setTimeout(()=>bdayEl.classList.add('off'),2500);}
+const cv=$('#confetti'),cx2=cv.getContext('2d');let parts=[],confRun=false,confWanted=false;
+function sizeCv(){cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;}
+addEventListener('resize',sizeCv);sizeCv();
+function confettiOn(on){confWanted=on;if(RM)return;if(on&&!confRun){confRun=true;requestAnimationFrame(confLoop);}}
+function confLoop(){
+ const W=cv.width,H=cv.height,dpr=devicePixelRatio;cx2.clearRect(0,0,W,H);
+ if(confWanted&&parts.length<160)for(let i=0;i<3;i++)parts.push({x:Math.random()*W,y:-20*dpr,vx:(Math.random()-.5)*1.4*dpr,vy:(1.4+Math.random()*2)*dpr,r:(3+Math.random()*4)*dpr,a:Math.random()*6,va:(Math.random()-.5)*.2,c:['#e8c46a','#c8372d','#f0a23a','#4cbf6b','#3a8fd9','#fff3d6'][Math.floor(Math.random()*6)]});
+ parts.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.a+=p.va;cx2.save();cx2.translate(p.x,p.y);cx2.rotate(p.a);cx2.fillStyle=p.c;cx2.fillRect(-p.r,-p.r/2,p.r*2,p.r);cx2.restore();});
+ parts=parts.filter(p=>p.y<H+30*dpr);
+ if(confWanted||parts.length)requestAnimationFrame(confLoop);else{confRun=false;cx2.clearRect(0,0,W,H);}
+}
+
+/* ---------- MP3 del usuario ---------- */
+const files={};let db=null;
+function openDB(){return new Promise(res=>{try{const rq=indexedDB.open('vellonera',1);rq.onupgradeneeded=()=>rq.result.createObjectStore('discos');rq.onsuccess=()=>{db=rq.result;res();};rq.onerror=()=>res();}catch(e){res();}});}
+function saveFile(id,file){files[id]={name:file.name,blob:file};try{if(db)db.transaction('discos','readwrite').objectStore('discos').put({name:file.name,blob:file},id);}catch(e){}updateRow(id);}
+function dropFile(id){delete files[id];try{if(db)db.transaction('discos','readwrite').objectStore('discos').delete(id);}catch(e){}updateRow(id);}
+function loadFiles(){if(!db)return;try{const rq=db.transaction('discos').objectStore('discos').openCursor();rq.onsuccess=e=>{const cur=e.target.result;if(cur){if(byId[cur.key]&&!byId[cur.key].bday){files[cur.key]=cur.value;updateRow(cur.key);}cur.continue();}};}catch(e){}}
+
+/* ---------- menús ---------- */
+const esc=s=>s.replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function buildList(){
+ const row=s=>s.bday?`<div class="drow special" data-id="${s.id}">
+  <div class="dhead"><span class="dcode">${s.id}</span><span class="dt">${esc(s.t)}</span><span class="da">${esc(s.a)} · ${s.tag}</span></div>
+  <div class="dtools"><span class="here">Suena aquí mismo, a ritmo de merengue</span></div></div>`:`<div class="drow" data-id="${s.id}">
+  <div class="dhead"><span class="dcode">${s.id}</span><span class="dt">${esc(s.t)}</span><span class="da">${esc(s.a)} · ${s.tag}</span></div>
+  <div class="dtools">
+   <a class="tool fb" href="${linkFor(s.id)}" target="_blank" rel="noopener">Facebook ↗</a>
+   <button class="tool setlink" type="button">Pegar enlace</button>
+   <button class="tool load" type="button">Cargar MP3</button>
+   <button class="tool rm" type="button" hidden>Quitar MP3</button>
+   <span class="fname" hidden></span>
+   <input type="file" accept="audio/*" id="file-${s.id}" aria-label="MP3 para ${esc(s.t)}">
+  </div>
+  <div class="linkrow" hidden>
+   <input type="url" id="link-${s.id}" placeholder="https://www.facebook.com/reel/…" aria-label="Enlace de Facebook para ${esc(s.t)}">
+   <button class="tool savelink" type="button">Guardar</button>
+   <button class="tool clearlink" type="button">Borrar</button>
+  </div></div>`;
+ $('#discList').innerHTML='<div class="side">Lado A</div>'+SONGS.filter(s=>s.id[0]==='A').map(row).join('')+'<div class="side">Lado B</div>'+SONGS.filter(s=>s.id[0]==='B').map(row).join('');
+}
+function updateRow(id){
+ if(byId[id]&&byId[id].bday)return;
+ const r=document.querySelector(`.drow[data-id="${id}"]`);const strip=document.querySelector(`a.strip[data-id="${id}"]`);
+ if(strip)strip.setAttribute('href',linkFor(id));
+ if(!r)return;const f=files[id];const direct=!!directLink(id);
+ const a=r.querySelector('.fb');a.href=linkFor(id);a.textContent=direct?'Oír en Facebook ↗':'Buscar en sus reels ↗';a.classList.toggle('direct',direct);
+ r.querySelector('.setlink').textContent=fbLinks[id]?'Cambiar enlace':'Pegar enlace';
+ r.querySelector('.load').textContent=f?'Cambiar MP3':'Cargar MP3';r.querySelector('.rm').hidden=!f;
+ const fn=r.querySelector('.fname');fn.hidden=!f;fn.textContent=f?'♪ '+f.name:'';
+}
+const menuBtns=[...document.querySelectorAll('.mbtn')];
+function closeMenus(except){menuBtns.forEach(b=>{if(b===except)return;b.setAttribute('aria-expanded','false');$('#'+b.dataset.menu).hidden=true;});}
+menuBtns.forEach(b=>b.addEventListener('click',e=>{e.stopPropagation();const open=b.getAttribute('aria-expanded')==='true';closeMenus(b);b.setAttribute('aria-expanded',String(!open));$('#'+b.dataset.menu).hidden=open;}));
+document.addEventListener('click',e=>{if(!e.target.closest('.panel')&&!e.target.closest('.mbtn'))closeMenus();});
+document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenus();});
+
+/* ---------- estado y avisos ---------- */
+let credits=0,current=null,busy=false,token=0,pending=null,audio=null,endTimer=null,carX=300;
+let tt=null;function toast(m,ms){const t=$('#toast');t.textContent=m;t.classList.remove('off');clearTimeout(tt);tt=setTimeout(()=>t.classList.add('off'),ms||3800);}
+const setDisp=s=>{$('#disp').textContent=s;};
+const idleDisp=()=>credits?'SELECCIONE':'ECHE 5¢';
+function states(){
+ document.querySelectorAll('.drow').forEach(r=>r.classList.toggle('playing',!!current&&current.id===r.dataset.id));
+ document.querySelectorAll('a.strip').forEach(a=>a.classList.toggle('on',!!current&&current.id===a.dataset.id));
+ $('#stopBtn').disabled=!current||busy;
+ $('#npText').textContent=current?`${current.id} · ${current.t} (${current.a})`:'Nada todavía';
+ $('#cred').textContent=credits;
+}
+function showFb(id){const p=$('#fbPill');p.href=linkFor(id);p.textContent=directLink(id)?`Oír «${byId[id].t}» en Facebook ↗`:`Buscar «${byId[id].t}» en sus reels ↗`;p.hidden=false;}
+const hideFb=()=>{$('#fbPill').hidden=true;};
+function nudgeSlot(){const s=$('#slot');s.classList.remove('nudge');void s.getBoundingClientRect();s.classList.add('nudge');}
+
+/* ---------- mecanismo ---------- */
+const play=$('#play'),spin=$('#playSpin'),arm=$('#tonearm'),carriage=$('#carriage');
+const setRec=(cx,cy,sx,sy)=>play.setAttribute('transform',`translate(${cx} ${cy}) scale(${sx} ${sy})`);
+let spinning=false,ang=0,last=0;
+function spinLoop(now){if(!spinning)return;const dt=last?(now-last)/1000:0;last=now;ang=(ang+dt*(RM?40:270))%360;spin.setAttribute('transform',`rotate(${ang.toFixed(1)})`);requestAnimationFrame(spinLoop);}
+const moveCar=x=>{const x0=carX;carX=x;return tween(Math.max(250,Math.abs(x-x0)*3),p=>carriage.setAttribute('transform',`translate(${x0+(x-x0)*p},0)`));};
+
+async function insertCoin(){
+ if(busy)return;if(credits>=9){toast('Ya hay 9 créditos. Escoge tus discos.');return;}
+ busy=true;ac();states();
+ if(view!=='full')await cam('full',500);
+ const hand=$('#hand'),coin=$('#handCoin');hand.setAttribute('opacity',1);coin.setAttribute('opacity',1);coin.setAttribute('transform','');
+ await tween(560,p=>hand.setAttribute('transform',`translate(${-320*(1-p)},0)`));
+ await tween(220,p=>coin.setAttribute('transform',`translate(${14*p},0)`));
+ coin.setAttribute('opacity',0);clink();credits++;states();
+ await tween(440,p=>hand.setAttribute('transform',`translate(${-320*p},0)`));hand.setAttribute('opacity',0);
+ busy=false;states();if(!current)setDisp(idleDisp());
+ toast(credits===1?'¡Clin! Cinco centavos adentro. Escoge tu disco (A7 es el del cumpleaños).':`¡Clin! Llevas ${credits} créditos.`);
+ if(small()&&!current)cam('panel');
+}
+async function pressKeys(id){for(const k of [id[0],id[1]]){const g=document.querySelector(`.key[data-k="${k}"]`);if(!g)continue;g.classList.add('hit');clickSnd();await wait(170);g.classList.remove('hit');}}
+async function select(id,fromKeys){
+ if(current)await finish(token,true);
+ busy=true;credits--;states();setDisp(id+' ▸');
+ if(!fromKeys)await pressKeys(id);
+ await startRecord(id);
+}
+async function startRecord(id){
+ const s=byId[id];current=s;const my=++token;states();
+ const i=SONGS.indexOf(s),x=rackX(i);
+ setDisp(id+' ▸ CARGANDO');motor(2.6);
+ if(small())cam('win',800);
+ await moveCar(x);
+ $('#rk-'+id).setAttribute('opacity',0);$('#playLabel').setAttribute('fill',s.c);
+ setRec(x,216,.06,.53);play.setAttribute('opacity',1);
+ await tween(420,p=>setRec(x,216-34*p,.06,.53));
+ moveCar(300);
+ await tween(1150,p=>setRec(x+(300-x)*p,182+(372-182)*p,.06+.94*p,.53-.23*p));
+ drop();
+ await tween(650,p=>arm.setAttribute('transform',`rotate(${-38*(1-p)} 432 326)`));
+ jb.classList.add('playing');spinning=true;last=0;requestAnimationFrame(spinLoop);
+ setDisp(id+' ▸ SONANDO');busy=false;states();
+ if(s.bday)playBday(my);
+ else if(files[id])playFile(s,my);
+ else{showFb(id);toast(directLink(id)?`«${s.t}» se abrió en Facebook.`:`Busca «${s.t}» en los reels que se abrieron.`);endTimer=setTimeout(()=>finish(my),4*60*1000);}
+ setTimeout(()=>{if(view==='win'&&my===token)cam('full',900);},1800);
+}
+function playFile(s,my){
+ const f=files[s.id];const url=URL.createObjectURL(f.blob);const a=new Audio(url);a.volume=vol;audio={el:a,url};
+ let failed=false;const fail=()=>{if(failed||my!==token)return;failed=true;toast('No pude reproducir ese MP3. Prueba con otro archivo.');finish(my);};
+ a.onended=()=>finish(my);a.onerror=fail;const p=a.play();if(p&&p.catch)p.catch(fail);
+ toast(`Suena «${s.t}». ¡A bailar!`);
+}
+function stopAudio(){clearTimeout(endTimer);stopSong();if(ledTimer)stopCelebration();if(audio){audio.el.pause();URL.revokeObjectURL(audio.url);audio=null;}}
+async function finish(my,silent){
+ if(my!==token||!current)return;token++;
+ const s=current;stopAudio();hideFb();spinning=false;jb.classList.remove('playing');
+ busy=true;current=null;states();setDisp('GUARDANDO');
+ await tween(480,p=>arm.setAttribute('transform',`rotate(${-38*p} 432 326)`));
+ const x=rackX(SONGS.indexOf(s));motor(1.6);
+ await tween(850,p=>setRec(300+(x-300)*p,372+(182-372)*p,1-.94*p,.3+.23*p));
+ await tween(320,p=>setRec(x,182+34*p,.06,.53));
+ play.setAttribute('opacity',0);$('#rk-'+s.id).setAttribute('opacity',1);
+ busy=false;states();setDisp(idleDisp());
+ if(!silent)toast(s.bday?'¡Que viva el profesor Manuel Inoa! Echa otra moneda para repetirlo.':(credits?'Te queda crédito. Escoge otro disco.':'Echa otra moneda para seguir el bailoteo.'));
+}
+
+/* ---------- eventos ---------- */
+const slot=$('#slot');
+slot.addEventListener('click',insertCoin);
+slot.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();insertCoin();}});
+function onKey(k){
+ ac();clickSnd();const g=document.querySelector(`.key[data-k="${k}"]`);if(g){g.classList.add('hit');setTimeout(()=>g.classList.remove('hit'),160);}
+ if(busy)return;
+ if(k==='A'||k==='B'){pending=k;setDisp(k+' _');return;}
+ if(k==='X'){pending=null;setDisp(current?current.id+' ▸ SONANDO':idleDisp());return;}
+ if(!pending){toast('Primero marca la letra A o B.');return;}
+ const id=pending+k;pending=null;
+ if(!byId[id]){toast(`${id} está libre: no hay disco ahí.`);setDisp(current?current.id+' ▸ SONANDO':idleDisp());return;}
+ if(credits<1){toast('Echa 5 centavos primero.');nudgeSlot();setDisp(idleDisp());return;}
+ select(id,true);
+}
+$('#keys').addEventListener('click',e=>{const g=e.target.closest('.key');if(!g)return;if(view==='full'&&small()){cam('panel');return;}onKey(g.dataset.k);});
+$('#keys').addEventListener('keydown',e=>{const g=e.target.closest('.key');if(g&&(e.key==='Enter'||e.key===' ')){e.preventDefault();onKey(g.dataset.k);}});
+$('#strips').addEventListener('click',e=>{
+ const a=e.target.closest('a.strip');if(!a)return;const id=a.dataset.id;ac();
+ if(byId[id].bday)e.preventDefault();
+ if(view==='full'&&small()&&e.detail!==0){e.preventDefault();cam('panel');return;}
+ if(credits<1){e.preventDefault();toast('Echa 5 centavos primero: toca la ranura de 5¢.');nudgeSlot();return;}
+ if(busy){e.preventDefault();return;}
+ if(files[id])e.preventDefault();
+ pending=null;select(id,false);
+});
+$('#stopBtn').addEventListener('click',()=>{if(current&&!busy)finish(token);});
+$('#vol').addEventListener('input',e=>{vol=parseFloat(e.target.value);if(master)master.gain.value=vol;if(audio)audio.el.volume=vol;});
+$('#discList').addEventListener('click',e=>{
+ const r=e.target.closest('.drow');if(!r)return;const id=r.dataset.id;
+ if(e.target.closest('.load'))r.querySelector('input[type=file]').click();
+ else if(e.target.closest('.rm')){dropFile(id);toast(`${id} ya no tiene MP3.`);}
+ else if(e.target.closest('.setlink')){const lr=r.querySelector('.linkrow');lr.hidden=!lr.hidden;if(!lr.hidden){const inp=lr.querySelector('input');inp.value=fbLinks[id]||'';inp.focus();}}
+ else if(e.target.closest('.savelink')){const lr=r.querySelector('.linkrow');const v=lr.querySelector('input').value.trim();
+  if(!validFb(v)){toast('Ese enlace no parece de Facebook. Copia el enlace del reel y pégalo aquí.');return;}
+  fbLinks[id]=v;saveLinks();lr.hidden=true;updateRow(id);if(current&&current.id===id)showFb(id);toast(`Listo: ${id} abre su reel en Facebook.`);}
+ else if(e.target.closest('.clearlink')){delete fbLinks[id];saveLinks();r.querySelector('.linkrow').hidden=true;updateRow(id);toast(`${id} vuelve a abrir los reels de Ramón Torres Cordero.`);}
+});
+$('#discList').addEventListener('change',e=>{const inp=e.target;if(inp.type!=='file'||!inp.files[0])return;const id=inp.closest('.drow').dataset.id;saveFile(id,inp.files[0]);toast(`Listo: ${id} suena con tu MP3.`);inp.value='';});
+
+buildStrips();buildList();SONGS.forEach(s=>updateRow(s.id));states();updZoomBtn();
+openDB().then(loadFiles);
+setTimeout(()=>toast('Hoy hay disco especial: echa 5¢ y marca A7 para el profesor Manuel Inoa.',6500),900);
+})();
+</script>
+
+<script>
+if('serviceWorker' in navigator){addEventListener('load',()=>{navigator.serviceWorker.register('sw.js').catch(()=>{});});}
+</script>
+</body>
+</html>
