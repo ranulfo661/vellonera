@@ -17,7 +17,7 @@
 <meta property="og:type" content="website">
 <meta property="og:title" content="La Vellonera · ¡Feliz cumpleaños, profesor Manuel Inoa!">
 <meta property="og:description" content="Echa 5 centavos, marca A7 y que suene el merengue. Una vellonera de los 70 en un colmado de diciembre de 1976.">
-<meta property="og:image" content="https://ranulfo661.github.io/vellonera/og.png">
+<meta property="og:image" content="https://ranulfo661.github.io/vellonera/og.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://ranulfo661.github.io/vellonera/">
@@ -46,6 +46,7 @@
 html,body{height:100%;background:var(--room);color:var(--cream)}
 body{font-family:var(--f-ui);font-size:16px;line-height:1.4;overflow:hidden;-webkit-tap-highlight-color:transparent}
 .scene{position:fixed;inset:0;overflow:hidden;background:var(--room)}
+.scene::before{content:"";position:absolute;inset:-60px;background:url(vellonera.jpg) center/cover no-repeat;filter:blur(26px) brightness(.42) saturate(1.1)}
 .scene svg{position:absolute;inset:0;width:100%;height:100%;display:block}
 #jb{touch-action:manipulation}
 #confetti{position:fixed;inset:0;width:100%;height:100%;pointer-events:none;z-index:12}
@@ -108,18 +109,21 @@ body{font-family:var(--f-ui);font-size:16px;line-height:1.4;overflow:hidden;-web
 .fbpill:focus-visible{outline:3px solid var(--amber);outline-offset:2px}
 
 /* Vellonera */
-.xbulb{animation:chase 2.4s infinite}
-@keyframes chase{0%,49%{opacity:1}50%,100%{opacity:.25}}
-#archGlow{opacity:.55;transition:opacity .6s}
-.playing #archGlow{opacity:1;animation:pulse .87s ease-in-out infinite alternate}
-@keyframes pulse{from{opacity:.65}to{opacity:1}}
-#spkGlow{opacity:.15;transition:opacity .6s}
-.playing #spkGlow{opacity:1;animation:beat .43s ease-in-out infinite alternate}
-@keyframes beat{from{opacity:.5}to{opacity:1}}
-#winGlow{opacity:.4;transition:opacity .8s}
-.playing #winGlow{opacity:1}
+.glow{mix-blend-mode:screen;pointer-events:none}
+#archGlow{opacity:.12;transition:opacity .6s}
+.playing #archGlow{animation:pulse .87s ease-in-out infinite alternate}
+@keyframes pulse{from{opacity:.35}to{opacity:.85}}
+#spkGlow{opacity:0;transition:opacity .6s}
+.playing #spkGlow{animation:beat .43s ease-in-out infinite alternate}
+@keyframes beat{from{opacity:.3}to{opacity:.8}}
+#winGlow{opacity:0;transition:opacity .8s}
+.playing #winGlow{opacity:.8}
+#carriage,#play{pointer-events:none}
 .key,.slot,a.strip{cursor:pointer}
-.key.hit rect{fill:var(--amber)}
+.key rect{fill:transparent;transition:fill .12s}
+.key:hover rect{fill:rgba(255,226,166,.25)}
+.key.hit rect{fill:rgba(240,162,58,.6)}
+.slot:hover rect.plate{fill:rgba(255,226,166,.18)}
 .key:focus-visible rect,.slot:focus-visible rect.plate,a.strip:focus-visible rect.bg{stroke:var(--amber);stroke-width:4}
 .key:focus,.slot:focus,a.strip:focus{outline:none}
 a.strip:hover rect.bg{fill:#fff8e6}
@@ -127,189 +131,81 @@ a.strip.special rect.bg{fill:#f5d987}
 a.strip.special:hover rect.bg{fill:#ffe9a8}
 a.strip.on rect.bg{fill:#ffe2a6}
 .special-glow{animation:chase 1.2s infinite}
+@keyframes chase{0%,49%{opacity:1}50%,100%{opacity:.25}}
+.slot{transform-box:fill-box}
 .slot.nudge{animation:nudge .45s}
 @keyframes nudge{20%{transform:translateX(-6px)}40%{transform:translateX(6px)}60%{transform:translateX(-3px)}80%{transform:translateX(2px)}}
-@media (prefers-reduced-motion:reduce){.xbulb,.playing #archGlow,.playing #spkGlow,.slot.nudge,.special-glow{animation:none}}
+@media (prefers-reduced-motion:reduce){.playing #archGlow,.playing #spkGlow,.slot.nudge,.special-glow{animation:none}.playing #archGlow{opacity:.6}.playing #spkGlow{opacity:.5}}
 </style>
 </head>
 <body>
 
 
 <div class="scene">
-  <!-- el colmado: llena toda la pantalla -->
-  <svg id="room" viewBox="0 0 1600 1000" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+  <!-- la vellonera: foto de base; encima van las piezas que se mueven y se tocan -->
+  <svg id="jb" viewBox="0 0 1122 1402" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Vellonera La Quisqueyana en un bar dominicano, con arco iluminado, cambiador de discos, panel de fichas, monedero y bocina">
     <defs>
-      <linearGradient id="wallG" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#2c1d14"/><stop offset="1" stop-color="#4b3322"/></linearGradient>
-      <radialGradient id="lampR" gradientUnits="userSpaceOnUse" cx="800" cy="330" r="760"><stop offset="0" stop-color="#ffcf7a" stop-opacity=".42"/><stop offset=".45" stop-color="#ffb04a" stop-opacity=".12"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
-      <linearGradient id="floorShade" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#000" stop-opacity=".55"/><stop offset="1" stop-color="#000" stop-opacity=".15"/></linearGradient>
-      <radialGradient id="vign" cx=".5" cy=".5" r=".75"><stop offset=".55" stop-color="#000" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".7"/></radialGradient>
-    </defs>
-    <rect width="1600" height="640" fill="url(#wallG)"/>
-    <g id="planks" stroke="#000" stroke-opacity=".22" stroke-width="2"></g>
-    <rect y="520" width="1600" height="120" fill="#2a1a12"/>
-    <rect y="512" width="1600" height="10" fill="#6b4a2a"/>
-    <g id="floor"></g>
-    <rect y="640" width="1600" height="360" fill="url(#floorShade)"/>
-    <rect y="636" width="1600" height="6" fill="#1a110c"/>
-    <g transform="rotate(-2 330 190)">
-      <rect x="170" y="140" width="320" height="96" rx="6" fill="#efe2c4"/>
-      <rect x="170" y="140" width="320" height="96" rx="6" fill="none" stroke="#c8372d" stroke-width="4"/>
-      <text x="330" y="188" text-anchor="middle" font-family="Shrikhand, Georgia, serif" font-size="34" fill="#c8372d">Colmado</text>
-      <text x="330" y="220" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="17" letter-spacing="2" fill="#2a1a12">LA ESQUINA · CERVEZA FRÍA</text>
-    </g>
-    <rect x="1220" y="170" width="120" height="150" fill="#efe2c4"/>
-    <rect x="1220" y="170" width="120" height="36" fill="#c8372d"/>
-    <text x="1280" y="196" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="22" fill="#efe2c4">DICIEMBRE</text>
-    <text x="1280" y="240" text-anchor="middle" font-family="Courier Prime, monospace" font-weight="700" font-size="30" fill="#2a1a12">1976</text>
-    <g id="calGrid" stroke="#bda98a" stroke-width="1.2"></g>
-    <rect x="110" y="380" width="360" height="12" fill="#5a3a20"/>
-    <g id="bottles"></g>
-    <path d="M-20 40 Q200 120 400 50 Q600 -10 800 60 Q1000 120 1200 50 Q1400 -10 1620 60" stroke="#111" stroke-width="3" fill="none"/>
-    <g id="xlights"></g>
-    <rect width="1600" height="1000" fill="url(#lampR)"/>
-    <rect width="1600" height="1000" fill="url(#vign)"/>
-  </svg>
-
-  <!-- la vellonera de madera, en perspectiva -->
-  <svg id="jb" viewBox="20 100 720 1030" preserveAspectRatio="xMidYMid meet" role="img" aria-label="Vellonera antigua de madera con arco iluminado, cambiador de discos, panel de fichas, monedero y bocina">
-    <defs>
-      <linearGradient id="woodF" x1="0" x2="1"><stop offset="0" stop-color="#4a240f"/><stop offset=".3" stop-color="#8a4c26"/><stop offset=".62" stop-color="#6e3a1c"/><stop offset="1" stop-color="#3f1e0c"/></linearGradient>
-      <linearGradient id="woodS" x1="0" x2="1"><stop offset="0" stop-color="#3a1b0b"/><stop offset="1" stop-color="#1f0e06"/></linearGradient>
-      <linearGradient id="shadeV" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".1"/><stop offset=".3" stop-color="#fff" stop-opacity="0"/><stop offset="1" stop-color="#000" stop-opacity=".35"/></linearGradient>
-      <linearGradient id="chrome" x1="0" x2="1"><stop offset="0" stop-color="#8f8a7f"/><stop offset=".45" stop-color="#f4f0e4"/><stop offset=".7" stop-color="#b9b3a5"/><stop offset="1" stop-color="#7d786d"/></linearGradient>
-      <linearGradient id="chromeV" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f4f0e4"/><stop offset="1" stop-color="#7d786d"/></linearGradient>
       <linearGradient id="brass" x1="0" x2="1"><stop offset="0" stop-color="#8a6a2e"/><stop offset=".45" stop-color="#f6dc98"/><stop offset="1" stop-color="#8f6f30"/></linearGradient>
-      <linearGradient id="amber" x1="0" x2="1"><stop offset="0" stop-color="#e06a1c"/><stop offset=".5" stop-color="#ffd27a"/><stop offset="1" stop-color="#e06a1c"/></linearGradient>
-      <linearGradient id="ivory" x1="0" x2="1"><stop offset="0" stop-color="#d9c9a2"/><stop offset=".5" stop-color="#f5ebd2"/><stop offset="1" stop-color="#c9b78e"/></linearGradient>
-      <linearGradient id="creamG" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f7ecd4"/><stop offset="1" stop-color="#dcc79c"/></linearGradient>
-      <linearGradient id="winBg" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#3b1c12"/><stop offset="1" stop-color="#110b08"/></linearGradient>
-      <radialGradient id="glowG" cx=".5" cy=".55" r=".6"><stop offset="0" stop-color="#f0a23a" stop-opacity=".6"/><stop offset="1" stop-color="#f0a23a" stop-opacity="0"/></radialGradient>
-      <radialGradient id="ampG" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#ffb347" stop-opacity=".95"/><stop offset="1" stop-color="#c8372d" stop-opacity="0"/></radialGradient>
+      <linearGradient id="stripG" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#fbf1d6"/><stop offset="1" stop-color="#eedfb4"/></linearGradient>
+      <linearGradient id="stripId" x1="0" x2="0" y1="0" y2="1"><stop offset="0" stop-color="#f3e6c2"/><stop offset="1" stop-color="#e3cf9c"/></linearGradient>
+      <radialGradient id="glowG" cx=".5" cy=".55" r=".6"><stop offset="0" stop-color="#ffb04a" stop-opacity=".55"/><stop offset="1" stop-color="#ffb04a" stop-opacity="0"/></radialGradient>
+      <radialGradient id="ampG" cx=".5" cy=".5" r=".6"><stop offset="0" stop-color="#ffb347" stop-opacity=".9"/><stop offset="1" stop-color="#c8372d" stop-opacity="0"/></radialGradient>
       <radialGradient id="coinG" cx=".35" cy=".35" r=".8"><stop offset="0" stop-color="#ffffff"/><stop offset=".5" stop-color="#cfcbc1"/><stop offset="1" stop-color="#7d796f"/></radialGradient>
-      <radialGradient id="shadowG" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#000" stop-opacity=".75"/><stop offset="1" stop-color="#000" stop-opacity="0"/></radialGradient>
-      <linearGradient id="glassG" x1="0" x2="1" y1="0" y2="1"><stop offset="0" stop-color="#fff" stop-opacity=".16"/><stop offset=".35" stop-color="#fff" stop-opacity=".03"/><stop offset="1" stop-color="#fff" stop-opacity="0"/></linearGradient>
-      <pattern id="diamond" width="16" height="16" patternUnits="userSpaceOnUse"><path d="M8 0 L16 8 L8 16 L0 8 Z" fill="none" stroke="#cfc9ba" stroke-width="1.6"/></pattern>
-      <filter id="blur8" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="8"/></filter>
-      <filter id="grain" x="0" y="0" width="100%" height="100%"><feTurbulence type="fractalNoise" baseFrequency=".9" numOctaves="2" stitchTiles="stitch"/><feColorMatrix type="matrix" values="0 0 0 0 .1  0 0 0 0 .05  0 0 0 0 .02  0 0 0 .55 0"/></filter>
-      <clipPath id="frontClip"><path d="M90 1100 L90 430 A260 260 0 0 1 610 430 L610 1100 Z"/></clipPath>
-      <clipPath id="archClip"><path d="M150 620 L150 420 A200 200 0 0 1 550 420 L550 620 Z"/></clipPath>
-      <clipPath id="winClip"><rect x="74" y="114" width="452" height="312" rx="20"/></clipPath>
+      <radialGradient id="selG" cx=".5" cy=".5" r=".5"><stop offset="0" stop-color="#ffe2a0" stop-opacity=".95"/><stop offset="1" stop-color="#ffb04a" stop-opacity="0"/></radialGradient>
+      <filter id="blur8" x="-20%" y="-20%" width="140%" height="140%"><feGaussianBlur stdDeviation="10"/></filter>
+      <filter id="ledGlow" x="-20%" y="-60%" width="140%" height="220%"><feGaussianBlur stdDeviation="2.2" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter>
     </defs>
 
-    <ellipse cx="400" cy="1100" rx="370" ry="40" fill="url(#shadowG)"/>
+    <image href="vellonera.jpg" x="0" y="0" width="1122" height="1402" preserveAspectRatio="none"/>
 
-    <!-- volumen: costado y techo curvo -->
-    <path d="M244.4 192.4 L334.4 152.4 A260 260 0 0 1 700 390 L700 1060 L610 1100 L610 430 A260 260 0 0 0 244.4 192.4 Z" fill="url(#woodS)"/>
-    <path d="M334.4 152.4 A260 260 0 0 1 700 390" fill="none" stroke="url(#chrome)" stroke-width="4"/>
-    <path d="M610 1082 L700 1042 L700 1060 L610 1100 Z" fill="#6b665c"/>
-    <g stroke="#000" stroke-opacity=".22" stroke-width="2"><line x1="635" y1="430" x2="635" y2="1088"/><line x1="668" y1="410" x2="668" y2="1073"/></g>
+    <!-- luces que se encienden cuando suena un disco -->
+    <rect id="winGlow" class="glow" x="300" y="200" width="520" height="470" fill="url(#glowG)"/>
+    <path id="archGlow" class="glow" d="M270 467 A288 300 0 0 1 846 467" fill="none" stroke="#ffb347" stroke-width="54" filter="url(#blur8)"/>
+    <rect id="spkGlow" class="glow" x="312" y="1126" width="498" height="104" rx="12" fill="url(#ampG)"/>
 
-    <!-- frente de madera -->
-    <path d="M90 1100 L90 430 A260 260 0 0 1 610 430 L610 1100 Z" fill="url(#woodF)"/>
-    <g clip-path="url(#frontClip)">
-      <g id="grainLines" fill="none" stroke="#2a1206"></g>
-      <rect x="90" y="160" width="520" height="940" fill="url(#shadeV)"/>
-      <rect x="90" y="160" width="520" height="940" filter="url(#grain)" opacity=".5"/>
+    <!-- cambiador: la luz del selector recorre el estante; el disco viaja al plato -->
+    <g id="rack"></g>
+    <g id="carriage" transform="translate(553,0)">
+      <ellipse cx="0" cy="410" rx="26" ry="14" fill="url(#selG)"/>
     </g>
-    <path d="M90 1100 L90 430 A260 260 0 0 1 610 430 L610 1100 Z" fill="none" stroke="url(#chrome)" stroke-width="7" stroke-linejoin="round"/>
-
-    <!-- arco iluminado -->
-    <path id="archGlow" d="M112 432 A238 238 0 0 1 588 432" fill="none" stroke="#ffb347" stroke-width="30" filter="url(#blur8)"/>
-    <path d="M112 432 A238 238 0 0 1 588 432" fill="none" stroke="url(#amber)" stroke-width="18"/>
-    <g id="archRibs" stroke="#8a4a1a" stroke-width="2" opacity=".55"></g>
-    <path d="M100 432 A250 250 0 0 1 600 432" fill="none" stroke="url(#chrome)" stroke-width="3"/>
-    <path d="M124 432 A226 226 0 0 1 576 432" fill="none" stroke="url(#chrome)" stroke-width="3"/>
-
-    <!-- columnas de marfil -->
-    <rect x="96" y="440" width="26" height="638" rx="10" fill="url(#ivory)"/>
-    <rect x="578" y="440" width="26" height="638" rx="10" fill="url(#ivory)"/>
-    <g id="flutes" stroke="#a8946a" stroke-width="1.2" opacity=".7"></g>
-
-    <!-- ventana en arco con el cambiador -->
-    <path d="M150 620 L150 420 A200 200 0 0 1 550 420 L550 620 Z" fill="url(#winBg)"/>
-    <g clip-path="url(#archClip)">
-      <g id="sunburst" stroke="#e8c46a" stroke-width="2" opacity=".35"></g>
-      <text x="350" y="290" text-anchor="middle" font-family="Shrikhand, Georgia, serif" font-size="30" fill="#e8c46a">La Quisqueyana</text>
-      <text x="350" y="318" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="13" letter-spacing="5" fill="#d9c38c">· SINFONOLA DE 45 ·</text>
-      <g transform="translate(160 338) scale(.826) translate(-70 -110)">
-        <g clip-path="url(#winClip)">
-          <rect id="winGlow" x="74" y="114" width="452" height="312" fill="url(#glowG)"/>
-          <line x1="92" y1="147" x2="508" y2="147" stroke="url(#brass)" stroke-width="4" stroke-linecap="round"/>
-          <g id="carriage" transform="translate(300,0)">
-            <rect x="-20" y="139" width="40" height="15" rx="4" fill="url(#brass)"/>
-            <line x1="0" y1="154" x2="0" y2="168" stroke="#d9c38c" stroke-width="3"/>
-            <rect x="-7" y="166" width="14" height="5" rx="2" fill="#d9c38c"/>
-          </g>
-          <rect x="96" y="262" width="408" height="9" rx="3" fill="url(#brass)"/>
-          <g id="rack"></g>
-          <ellipse cx="300" cy="392" rx="112" ry="33" fill="#1b1714"/>
-          <ellipse cx="300" cy="384" rx="104" ry="30" fill="#2e2925" stroke="#4d453e" stroke-width="1.5"/>
-          <g id="play" opacity="0" transform="translate(300 372) scale(1 .3)">
-            <g id="playSpin">
-              <circle r="85" fill="#0c0b0a"/>
-              <circle r="78" fill="none" stroke="#24211f" stroke-width="1.5"/>
-              <circle r="68" fill="none" stroke="#24211f" stroke-width="1.5"/>
-              <circle r="58" fill="none" stroke="#24211f" stroke-width="1.5"/>
-              <circle r="48" fill="none" stroke="#24211f" stroke-width="1.5"/>
-              <path d="M0 0 L82 -22 A85 85 0 0 1 82 22 Z" fill="#fff" opacity=".08"/>
-              <circle id="playLabel" r="31" fill="#c8372d"/>
-              <rect x="-20" y="-12" width="40" height="5" rx="2" fill="#fff" opacity=".75"/>
-              <rect x="-14" y="8" width="28" height="4" rx="2" fill="#fff" opacity=".55"/>
-              <circle r="12" fill="none" stroke="#e8c14a" stroke-width="2.5"/>
-              <rect x="-1.6" y="-12" width="3.2" height="12" fill="#e8c14a"/>
-              <rect x="-1.6" y="-12" width="3.2" height="12" fill="#e8c14a" transform="rotate(120)"/>
-              <rect x="-1.6" y="-12" width="3.2" height="12" fill="#e8c14a" transform="rotate(240)"/>
-              <circle r="4" fill="#e8c14a"/>
-            </g>
-          </g>
-          <circle cx="300" cy="372" r="2.5" fill="#d0d0d0"/>
-          <g id="tonearm" transform="rotate(-38 432 326)">
-            <circle cx="432" cy="326" r="13" fill="url(#brass)"/>
-            <circle cx="432" cy="326" r="5" fill="#5a4520"/>
-            <line x1="432" y1="326" x2="364" y2="362" stroke="#efe6cf" stroke-width="5" stroke-linecap="round"/>
-            <rect x="352" y="356" width="18" height="10" rx="3" fill="#d9c38c" transform="rotate(28 361 361)"/>
-          </g>
-        </g>
+    <g id="play" opacity="0" transform="translate(553 577) scale(2.19 .32)">
+      <g id="playSpin">
+        <circle r="85" fill="#0c0b0a"/>
+        <circle r="78" fill="none" stroke="#2a2724" stroke-width="1.5"/>
+        <circle r="68" fill="none" stroke="#2a2724" stroke-width="1.5"/>
+        <circle r="58" fill="none" stroke="#2a2724" stroke-width="1.5"/>
+        <circle r="48" fill="none" stroke="#2a2724" stroke-width="1.5"/>
+        <path d="M0 0 L82 -22 A85 85 0 0 1 82 22 Z" fill="#fff" opacity=".1"/>
+        <circle id="playLabel" r="31" fill="#c8372d"/>
+        <rect x="-20" y="-12" width="40" height="5" rx="2" fill="#fff" opacity=".75"/>
+        <rect x="-14" y="8" width="28" height="4" rx="2" fill="#fff" opacity=".55"/>
+        <circle r="12" fill="none" stroke="#e8c14a" stroke-width="2.5"/>
+        <circle r="4" fill="#e8c14a"/>
       </g>
-      <path d="M150 620 L150 420 A200 200 0 0 1 550 420 L550 620 Z" fill="url(#glassG)"/>
-      <path d="M160 620 L250 230 L300 230 L205 620 Z" fill="#fff" opacity=".05"/>
     </g>
-    <path d="M150 620 L150 420 A200 200 0 0 1 550 420 L550 620 Z" fill="none" stroke="url(#chrome)" stroke-width="8" stroke-linejoin="round"/>
+    <g id="tonearm"></g>
 
-    <!-- banda con pantalla -->
-    <rect x="120" y="628" width="460" height="36" rx="10" fill="url(#chrome)"/>
-    <rect x="252" y="633" width="196" height="26" rx="5" fill="#120c09"/>
-    <text id="disp" x="350" y="651.5" text-anchor="middle" font-family="Courier Prime, Courier New, monospace" font-weight="700" font-size="15" letter-spacing="1.2" fill="#ff6a3d">ECHE 5¢</text>
-    <text x="188" y="651" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="12" letter-spacing="2" fill="#3b3730">SELECCIÓN</text>
-    <text x="515" y="651" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="12" letter-spacing="2" fill="#3b3730">5¢ UN DISCO</text>
+    <!-- pantalla de selección -->
+    <rect x="451" y="694.5" width="215" height="26" rx="4" fill="#160807"/>
+    <text id="disp" x="558.5" y="714.5" text-anchor="middle" font-family="Courier Prime, Courier New, monospace" font-weight="700" font-size="19" letter-spacing="1.5" fill="#ff4a3a" filter="url(#ledGlow)">ECHE 5¢</text>
 
-    <!-- panel de fichas -->
-    <rect x="120" y="670" width="460" height="226" rx="14" fill="#1a1310" stroke="url(#chrome)" stroke-width="3"/>
+    <!-- rótulo corregido: «5¢ UN DISCO» -->
+    <rect x="684" y="697" width="128" height="22" rx="3" fill="#e9cfbc"/>
+    <text x="748" y="713.5" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="15" letter-spacing="1.6" fill="#2a2420">5¢ UN DISCO</text>
+
+    <!-- fichas con los nombres correctos -->
     <g id="strips"></g>
 
-    <!-- consola -->
-    <rect x="120" y="904" width="460" height="70" rx="12" fill="url(#creamG)" stroke="url(#chrome)" stroke-width="3"/>
+    <!-- consola: monedero, teclas y crédito (zonas táctiles sobre la foto) -->
     <g class="slot" id="slot" role="button" tabindex="0" aria-label="Echar una moneda de cinco centavos">
-      <rect class="plate" x="134" y="910" width="62" height="58" rx="9" fill="url(#chrome)" stroke="#6b665c" stroke-width="1.5"/>
-      <rect x="162" y="916" width="7" height="32" rx="2.5" fill="#120c09"/>
-      <text x="165" y="962" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="11" fill="#2a2620">ECHE 5¢</text>
+      <rect class="plate" x="284" y="1021" width="96" height="88" rx="12" fill="transparent"/>
     </g>
     <g id="keys"></g>
-    <rect x="418" y="910" width="150" height="58" rx="9" fill="#120c09" stroke="url(#chrome)" stroke-width="2"/>
-    <text x="493" y="926" text-anchor="middle" font-family="Barlow Condensed, Arial Narrow, sans-serif" font-weight="700" font-size="11" letter-spacing="2" fill="#d9c38c">CRÉDITO</text>
-    <text id="cred" x="493" y="960" text-anchor="middle" font-family="Courier Prime, Courier New, monospace" font-weight="700" font-size="30" fill="#ff6a3d">0</text>
-
-    <!-- bocina con rejilla de cromo -->
-    <rect x="134" y="982" width="432" height="92" rx="16" fill="#3a1b0b" stroke="url(#chrome)" stroke-width="3"/>
-    <rect x="146" y="992" width="408" height="72" rx="10" fill="#1a0c06"/>
-    <rect id="spkGlow" x="146" y="992" width="408" height="72" rx="10" fill="url(#ampG)"/>
-    <rect x="146" y="992" width="408" height="72" rx="10" fill="url(#diamond)" opacity=".85"/>
-    <circle cx="350" cy="1028" r="26" fill="url(#creamG)" stroke="url(#chrome)" stroke-width="3"/>
-    <text x="350" y="1035" text-anchor="middle" font-family="Shrikhand, Georgia, serif" font-size="18" fill="#8a2a1e">45</text>
-    <rect x="92" y="1080" width="516" height="20" rx="6" fill="url(#chrome)"/>
+    <rect x="690" y="1059" width="100" height="38" rx="4" fill="#0b0606"/>
+    <text id="cred" x="739" y="1091" text-anchor="middle" font-family="Courier Prime, Courier New, monospace" font-weight="700" font-size="34" fill="#ff3b30" filter="url(#ledGlow)">0</text>
 
     <!-- mano con la moneda -->
-    <g transform="translate(50 142)">
+    <g transform="translate(163.5 -127) scale(1.5)">
       <g id="hand" transform="translate(-320,0)" opacity="0">
         <rect x="-180" y="774" width="90" height="40" rx="7" fill="#efe2c0"/>
         <rect x="-96" y="780" width="168" height="27" rx="13" fill="#8a5636"/>
@@ -358,7 +254,7 @@ a.strip.on rect.bg{fill:#ffe2a6}
   <ol class="steps">
     <li>Toca la ranura de <b>5¢</b> para echar la moneda. Cada moneda da un disco.</li>
     <li>Toca una ficha del panel, o marca la letra y el número en las teclas. Para el cumpleaños: <b>A</b> y <b>7</b>.</li>
-    <li>La máquina saca el 45 del estante, lo acuesta en el plato y baja el brazo.</li>
+    <li>La máquina saca el 45 del estante, lo acuesta en el plato y lo pone a girar.</li>
     <li>A7 suena aquí mismo. Los demás discos abren el merengue original en Facebook.</li>
   </ol>
   <p class="note">En el teléfono, el primer toque en el panel acerca la cámara a las fichas; «Ver máquina» la aleja.</p>
@@ -405,65 +301,42 @@ function tween(dur,fn){return new Promise(res=>{if(RM){fn(1);res();return;}const
 function el(tag,attrs,parent,text){const e=document.createElementNS(NS,tag);for(const k in attrs)e.setAttribute(k,attrs[k]);if(text!=null)e.textContent=text;parent.appendChild(e);return e;}
 const jb=$('#jb');
 
-/* ---------- el colmado ---------- */
-(function room(){
- const pl=$('#planks');for(let x=40;x<1600;x+=64)el('line',{x1:x,y1:0,x2:x,y2:512},pl);
- const fl=$('#floor');const VP=[800,330];const rows=[640,664,694,732,782,846,926,1000];const xs=[];for(let x=-2400;x<=4000;x+=200)xs.push(x);
- const at=(xb,y)=>VP[0]+(xb-VP[0])*(y-VP[1])/(1000-VP[1]);
- for(let r=0;r<rows.length-1;r++)for(let c=0;c<xs.length-1;c++){const y0=rows[r],y1=rows[r+1];
-  const pts=[[at(xs[c],y0),y0],[at(xs[c+1],y0),y0],[at(xs[c+1],y1),y1],[at(xs[c],y1),y1]].map(p=>p[0].toFixed(1)+','+p[1]).join(' ');
-  el('polygon',{points:pts,fill:(r+c)%2?'#9c8862':'#2f2219'},fl);}
- const cg=$('#calGrid');for(let i=0;i<4;i++)el('line',{x1:1232,x2:1328,y1:262+i*14,y2:262+i*14},cg);for(let i=0;i<7;i++)el('line',{x1:1234+i*15.5,x2:1234+i*15.5,y1:256,y2:310},cg);
- const bt=$('#bottles');[['#6b3d14',130],['#2f6b3a',170],['#7a5a1c',210],['#3f2a12',250],['#2f6b3a',290],['#8a2f22',330],['#6b3d14',370],['#7a5a1c',410]].forEach(([c,x],i)=>{const h=58+(i%3)*14;el('rect',{x:x,y:380-h,width:26,height:h,rx:6,fill:c},bt);el('rect',{x:x+9,y:380-h-20,width:8,height:22,fill:c},bt);});
- const xl=$('#xlights');const cols=['#e2402f','#4cbf6b','#f0a23a','#3a8fd9'];
- const tmp=el('path',{d:'M-20 40 Q200 120 400 50 Q600 -10 800 60 Q1000 120 1200 50 Q1400 -10 1620 60',fill:'none'},xl);const L=tmp.getTotalLength();
- for(let i=0;i<34;i++){const p=tmp.getPointAtLength(L*i/33);const b=el('ellipse',{cx:p.x,cy:p.y+11,rx:8,ry:11,fill:cols[i%4],class:'xbulb'},xl);b.style.animationDelay=(i%2?1.2:0)+'s';el('rect',{x:p.x-4,y:p.y-2,width:8,height:6,fill:'#333'},xl);}
-})();
-
 /* ---------- piezas de la máquina ---------- */
-function rackX(i){return 116+i*28.5;}
+const RACK=[374.7,400.7,425.3,461.3,492,516,551.3,575.3,598.7,622,656.7,692,716.7,746.7];
+const CX=553,CY=577,SHELF=462;
+function rackX(i){return RACK[i];}
 (function build(){
- let seed=7;const rnd=()=>{seed=(seed*16807)%2147483647;return seed/2147483647;};
- const gl=$('#grainLines');
- for(let k=0;k<46;k++){const x0=92+k*11.4+rnd()*6;let d=`M${x0.toFixed(1)} 160`;for(let y=220;y<=1100;y+=60){d+=` L${(x0+Math.sin(y/90+k)*3.5+rnd()*2).toFixed(1)} ${y}`;}el('path',{d,'stroke-width':(.8+rnd()*1.6).toFixed(2),opacity:(.08+rnd()*.14).toFixed(2)},gl);}
- const ribs=$('#archRibs');for(let i=1;i<24;i++){const a=Math.PI*(1-i/24);const c=Math.cos(a),s=Math.sin(a);el('line',{x1:350+229*c,y1:432-229*s,x2:350+247*c,y2:432-247*s},ribs);}
- const fl=$('#flutes');[96,578].forEach(x=>{for(let k=1;k<5;k++)el('line',{x1:x+k*5.2,y1:452,x2:x+k*5.2,y2:1066},fl);});
- const sb=$('#sunburst');for(let i=0;i<=18;i++){const a=Math.PI*(i/18);el('line',{x1:350+40*Math.cos(a),y1:420-40*Math.sin(a),x2:350+210*Math.cos(a),y2:420-210*Math.sin(a)},sb);}
- const rack=$('#rack');
- SONGS.forEach((s,i)=>{const x=rackX(i);const g=el('g',{id:'rk-'+s.id},rack);
-  el('rect',{x:x-5,y:170,width:10,height:92,rx:2.5,fill:'#0d0c0b'},g);
-  el('rect',{x:x-5,y:203,width:10,height:26,fill:s.c},g);
-  el('rect',{x:x-2,y:173,width:1.4,height:86,fill:'#fff',opacity:.16},g);
-  el('text',{x:x,y:186,'text-anchor':'middle','font-family':'Barlow Condensed, Arial Narrow, sans-serif','font-size':8,'font-weight':700,fill:'#d9c38c'},g,s.id);});
+ const rack=$('#rack');SONGS.forEach(s=>el('g',{id:'rk-'+s.id},rack));
  const keys=$('#keys');
- const mk=(k,x,y,w,label,aria)=>{const g=el('g',{class:'key','data-k':k,role:'button',tabindex:0,'aria-label':aria},keys);
-  el('rect',{x:x,y:y,width:w,height:24,rx:5,fill:'#fbf4e2',stroke:'#a88a52','stroke-width':1.5},g);
-  el('text',{x:x+w/2,y:y+17,'text-anchor':'middle','font-family':'Courier Prime, Courier New, monospace','font-weight':700,'font-size':label.length>2?10.5:15,fill:'#2a1a12'},g,label);};
- mk('A',206,910,34,'A','Letra A');mk('B',244,910,34,'B','Letra B');mk('X',282,910,128,'BORRAR','Borrar selección');
- for(let n=1;n<=7;n++)mk(String(n),206+(n-1)*29.4,941,26.5,String(n),'Número '+n);
+ const mk=(k,x,y,w,h,aria)=>{const g=el('g',{class:'key','data-k':k,role:'button',tabindex:0,'aria-label':aria},keys);
+  el('rect',{x:x,y:y,width:w,height:h,rx:7},g);};
+ mk('A',392,1029,38,32,'Letra A');mk('B',437,1029,38,32,'Letra B');mk('X',482,1029,159,32,'Borrar selección');
+ for(let n=1;n<=7;n++)mk(String(n),392+(n-1)*36.1,1066,33,34,'Número '+n);
 })();
 function buildStrips(){
  const layer=$('#strips');layer.innerHTML='';
  const colA=SONGS.filter(s=>s.id[0]==='A'),colB=SONGS.filter(s=>s.id[0]==='B');
- [colA,colB].forEach((list,c)=>{for(let r=0;r<7;r++){const s=list[r];const x=130+c*222,y=677+r*31.2;
+ [colA,colB].forEach((list,c)=>{for(let r=0;r<7;r++){const s=list[r];const x=299+c*269,y=743.5+r*37.5,w=c?251:255,h=33;
   if(!s)continue;
+  const col=s.bday?'#8a2a1e':(c?'#2f7d4f':'#c8372d');
   const a=el('a',{href:linkFor(s.id),target:s.bday?'_self':'_blank',rel:'noopener',class:'strip'+(s.bday?' special':''),'data-id':s.id,'aria-label':`${s.id}: ${s.t}, ${s.a}`},layer);
-  el('rect',{class:'bg',x:x,y:y,width:212,height:28,rx:3,fill:'#f6ecd4'},a);
-  el('rect',{x:x,y:y,width:212,height:3.5,rx:1,fill:s.bday?'#8a2a1e':(c?'#2f7d4f':'#c8372d')},a);
-  el('text',{x:x+7,y:y+20,'font-family':'Courier Prime, monospace','font-weight':700,'font-size':14.5,fill:s.bday?'#8a2a1e':(c?'#2f7d4f':'#c8372d')},a,s.id);
-  const tt=el('text',{x:x+35,y:y+14.5,'font-family':'Courier Prime, monospace','font-weight':700,'font-size':12,fill:'#2a1a12'},a,s.t.toUpperCase());
-  if(s.t.length>19){tt.setAttribute('textLength',170);tt.setAttribute('lengthAdjust','spacingAndGlyphs');}
-  const at=el('text',{x:x+35,y:y+25,'font-family':'Courier Prime, monospace','font-size':10,fill:s.bday?'#6b2a14':'#6b5440'},a,s.a);
-  if(s.a.length>24){at.setAttribute('textLength',170);at.setAttribute('lengthAdjust','spacingAndGlyphs');}
-  if(s.bday)el('circle',{class:'special-glow',cx:x+202,cy:y+14,r:4,fill:'#c8372d'},a);
+  el('rect',{class:'bg',x:x,y:y,width:w,height:h,rx:4,fill:'url(#stripG)'},a);
+  el('rect',{x:x,y:y,width:40,height:h,rx:4,fill:'url(#stripId)',opacity:s.bday?.5:1},a);
+  el('rect',{x:x,y:y+h-2.5,width:w,height:2.5,fill:c?'#2f7d4f':'#3d7a3a',opacity:.75},a);
+  el('text',{x:x+20,y:y+23.5,'text-anchor':'middle','font-family':'Courier Prime, monospace','font-weight':700,'font-size':19,fill:col},a,s.id);
+  const tt=el('text',{x:x+47,y:y+15,'font-family':'Courier Prime, monospace','font-weight':700,'font-size':14.5,fill:'#2a1a12'},a,s.t.toUpperCase());
+  const tw=w-60;if(s.t.length>21){tt.setAttribute('textLength',tw);tt.setAttribute('lengthAdjust','spacingAndGlyphs');}
+  const at=el('text',{x:x+47,y:y+28,'font-family':'Courier Prime, monospace','font-size':12.5,fill:s.bday?'#6b2a14':'#4a3a2a'},a,'•'+s.a);
+  if(s.a.length>27){at.setAttribute('textLength',tw);at.setAttribute('lengthAdjust','spacingAndGlyphs');}
+  if(s.bday)el('circle',{class:'special-glow',cx:x+w-10,cy:y+16,r:5,fill:'#c8372d'},a);
  }});
 }
 
 /* ---------- cámara ---------- */
-const VIEWS={full:[20,100,720,1030],panel:[112,620,476,360],win:[128,206,444,428]};
+const VIEWS={full:[0,0,1122,1402],panel:[268,672,584,450],win:[286,140,560,560]};
 let vb=VIEWS.full.slice(),view='full';
 function cam(name,dur){const to=VIEWS[name],from=vb.slice();view=name;updZoomBtn();return tween(dur||700,p=>{vb=from.map((v,i)=>v+(to[i]-v)*p);jb.setAttribute('viewBox',vb.map(n=>n.toFixed(1)).join(' '));});}
-const small=()=>{const r=jb.getBoundingClientRect();return Math.min(r.width/VIEWS.full[2],r.height/VIEWS.full[3])<.85;};
+const small=()=>{const r=jb.getBoundingClientRect();return Math.min(r.width/VIEWS.full[2],r.height/VIEWS.full[3])<.55;};
 function updZoomBtn(){$('#zoomBtn').textContent=view==='full'?'Acercar fichas':'Ver máquina';}
 $('#zoomBtn').addEventListener('click',()=>cam(view==='full'?'panel':'full'));
 const fsBtn=$('#fsBtn');
@@ -625,7 +498,7 @@ document.addEventListener('click',e=>{if(!e.target.closest('.panel')&&!e.target.
 document.addEventListener('keydown',e=>{if(e.key==='Escape')closeMenus();});
 
 /* ---------- estado y avisos ---------- */
-let credits=0,current=null,busy=false,token=0,pending=null,audio=null,endTimer=null,carX=300;
+let credits=0,current=null,busy=false,token=0,pending=null,audio=null,endTimer=null,carX=CX;
 let tt=null;function toast(m,ms){const t=$('#toast');t.textContent=m;t.classList.remove('off');clearTimeout(tt);tt=setTimeout(()=>t.classList.add('off'),ms||3800);}
 const setDisp=s=>{$('#disp').textContent=s;};
 const idleDisp=()=>credits?'SELECCIONE':'ECHE 5¢';
@@ -673,13 +546,13 @@ async function startRecord(id){
  setDisp(id+' ▸ CARGANDO');motor(2.6);
  if(small())cam('win',800);
  await moveCar(x);
- $('#rk-'+id).setAttribute('opacity',0);$('#playLabel').setAttribute('fill',s.c);
- setRec(x,216,.06,.53);play.setAttribute('opacity',1);
- await tween(420,p=>setRec(x,216-34*p,.06,.53));
- moveCar(300);
- await tween(1150,p=>setRec(x+(300-x)*p,182+(372-182)*p,.06+.94*p,.53-.23*p));
+ $('#playLabel').setAttribute('fill',s.c);
+ setRec(x,SHELF,.07,.5);play.setAttribute('opacity',1);
+ await tween(420,p=>setRec(x,SHELF-50*p,.07,.5));
+ moveCar(CX);
+ await tween(1150,p=>setRec(x+(CX-x)*p,SHELF-50+(CY-SHELF+50)*p,.07+2.12*p,.5-.18*p));
  drop();
- await tween(650,p=>arm.setAttribute('transform',`rotate(${-38*(1-p)} 432 326)`));
+ await wait(450);
  jb.classList.add('playing');spinning=true;last=0;requestAnimationFrame(spinLoop);
  setDisp(id+' ▸ SONANDO');busy=false;states();
  if(s.bday)playBday(my);
@@ -698,11 +571,12 @@ async function finish(my,silent){
  if(my!==token||!current)return;token++;
  const s=current;stopAudio();hideFb();spinning=false;jb.classList.remove('playing');
  busy=true;current=null;states();setDisp('GUARDANDO');
- await tween(480,p=>arm.setAttribute('transform',`rotate(${-38*p} 432 326)`));
+ await wait(300);
  const x=rackX(SONGS.indexOf(s));motor(1.6);
- await tween(850,p=>setRec(300+(x-300)*p,372+(182-372)*p,1-.94*p,.3+.23*p));
- await tween(320,p=>setRec(x,182+34*p,.06,.53));
- play.setAttribute('opacity',0);$('#rk-'+s.id).setAttribute('opacity',1);
+ moveCar(x);
+ await tween(850,p=>setRec(CX+(x-CX)*p,CY+(SHELF-50-CY)*p,2.19-2.12*p,.32+.18*p));
+ await tween(320,p=>setRec(x,SHELF-50+50*p,.07,.5));
+ play.setAttribute('opacity',0);moveCar(CX);
  busy=false;states();setDisp(idleDisp());
  if(!silent)toast(s.bday?'¡Que viva el profesor Manuel Inoa! Echa otra moneda para repetirlo.':(credits?'Te queda crédito. Escoge otro disco.':'Echa otra moneda para seguir el bailoteo.'));
 }
