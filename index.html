@@ -372,12 +372,12 @@ function motor(dur){if(!ac())return;const t=ctx.currentTime;const o=ctx.createOs
 function drop(){if(!ac())return;const t=ctx.currentTime;const o=ctx.createOscillator();o.type='sine';o.frequency.setValueAtTime(150,t);o.frequency.exponentialRampToValueAtTime(68,t+.14);const g=envG(master,t,.003,.35,.28);o.connect(g);o.start(t);o.stop(t+.36);nz(t,.03,'lowpass',900,.7,.12);}
 
 /* ---------- reproductor de YouTube dentro de la vellonera ---------- */
-let yt=null,ytReady=null,ytTry=0,ytList=[],ytMy=0,ytHintT=null;
+let yt=null,ytReady=null,ytTry=0,ytList=[],ytMy=0,ytHintT=null,primed=null,primedErr=false,ytOk=false;
 function loadYT(){
  if(ytReady)return ytReady;
  ytReady=new Promise(res=>{
   const make=()=>{yt=new YT.Player('ytPlayer',{width:'100%',height:'100%',playerVars:{playsinline:1,rel:0,modestbranding:1,controls:1},
-   events:{onReady:()=>res(yt),onStateChange:onYtState,onError:onYtError}});};
+   events:{onReady:()=>{ytOk=true;res(yt);},onStateChange:onYtState,onError:onYtError}});};
   if(window.YT&&YT.Player){make();return;}
   window.onYouTubeIframeAPIReady=make;
   const sc=document.createElement('script');sc.src='https://www.youtube.com/iframe_api';sc.onerror=()=>res(null);document.head.appendChild(sc);
@@ -390,25 +390,40 @@ function showCard(s){
  $('#npOpen').hidden=true;$('#npHint').hidden=true;$('#nowplay').hidden=false;
 }
 function hideCard(){$('#nowplay').hidden=true;clearTimeout(ytHintT);}
+function primeYT(s){
+ primed=null;primedErr=false;ytList=s.yt||[];ytTry=0;
+ showCard(s);$('#npDisc').textContent=s.id+' · Cargando el disco…';
+ if(!(yt&&ytOk&&yt.loadVideoById))return;
+ try{yt.unMute();yt.setVolume(Math.round(vol*100));yt.loadVideoById(ytList[0]);primed=s.id;}catch(e){primed=null;}
+}
 async function playYT(s,my){
- showCard(s);ytList=s.yt||[];ytTry=0;ytMy=my;
+ ytMy=my;$('#npDisc').textContent=s.id+' · Ahora suena';
+ if(primed===s.id&&yt){ if(primedErr){ytTry++;startTry();} else armHint(); return; }
+ showCard(s);$('#npDisc').textContent=s.id+' · Ahora suena';ytList=s.yt||[];ytTry=0;
  const p=await loadYT();
  if(my!==token)return;
  if(!p){failYT(s);return;}
- p.setVolume(Math.round(vol*100));
+ try{p.unMute();}catch(e){} p.setVolume(Math.round(vol*100));
  startTry();
 }
 function startTry(){
  if(ytTry>=ytList.length){failYT(current);return;}
- yt.loadVideoById(ytList[ytTry]);
- clearTimeout(ytHintT);ytHintT=setTimeout(()=>{if(yt&&yt.getPlayerState&&yt.getPlayerState()!==1&&ytMy===token)$('#npHint').hidden=false;},3500);
+ try{yt.unMute();}catch(e){} yt.loadVideoById(ytList[ytTry]);
+ armHint();
+}
+function armHint(){
+ clearTimeout(ytHintT);ytHintT=setTimeout(()=>{ if(!yt||ytMy!==token||!current)return;
+  const st=yt.getPlayerState?yt.getPlayerState():-1, muted=yt.isMuted?yt.isMuted():false;
+  if(st!==1){$('#npHint').textContent='Toca el video para que suene ▶';$('#npHint').hidden=false;}
+  else if(muted){$('#npHint').textContent='🔇 Toca el video para activar el sonido';$('#npHint').hidden=false;} },3500);
 }
 function onYtState(e){
+ if(e.data===1){ try{ if(yt.isMuted&&yt.isMuted()){yt.unMute();yt.setVolume(Math.round(vol*100));} }catch(_){} 
+  setTimeout(()=>{ try{ $('#npHint').hidden=!(yt.isMuted&&yt.isMuted()); if(!$('#npHint').hidden)$('#npHint').textContent='🔇 Toca el video para activar el sonido'; }catch(_){} },600); }
  if(ytMy!==token||!current)return;
- if(e.data===1){$('#npHint').hidden=true;}
  if(e.data===0){finish(ytMy);}
 }
-function onYtError(){ if(ytMy!==token||!current)return; ytTry++; startTry(); }
+function onYtError(){ if(primed&&ytMy!==token){primedErr=true;return;} if(ytMy!==token||!current)return; ytTry++; startTry(); }
 function failYT(s){
  if(!s)return;const a=$('#npOpen');a.href='https://www.youtube.com/watch?v='+(s.yt&&s.yt[0]||'');a.hidden=false;$('#npHint').hidden=true;
  toast('Este video no se deja reproducir aquí. Toca «abrir en YouTube».',6000);
@@ -479,7 +494,8 @@ async function insertCoin(){
 }
 async function pressKeys(id){for(const k of [id[0],id[1]]){const g=document.querySelector(`.key[data-k="${k}"]`);if(!g)continue;g.classList.add('hit');clickSnd();await wait(170);g.classList.remove('hit');}}
 async function select(id,fromKeys){
- if(current)await finish(token,true);
+ if(current){stopYT();await finish(token,true);}
+ primeYT(byId[id]);
  busy=true;credits--;states();setDisp(id+' ▸');
  if(!fromKeys)await pressKeys(id);
  await startRecord(id);
