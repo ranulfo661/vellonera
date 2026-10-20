@@ -15,9 +15,9 @@
 <meta name="apple-mobile-web-app-title" content="Vellonera">
 <!-- Tarjeta de vista previa para WhatsApp y Facebook -->
 <meta property="og:type" content="website">
-<meta property="og:title" content="La Vellonera · Disco del día: «Ese barco velero»">
-<meta property="og:description" content="Echa 5 centavos, marca A1 y que suene Isabel Pantoja. Dedicado a Nuvia en su cumpleaños.">
-<meta property="og:image" content="https://ranulfo661.github.io/vellonera/og-velero.jpg">
+<meta property="og:title" content="La Vellonera · Un disco sorpresa para Nuvia">
+<meta property="og:description" content="Echa 5 centavos y toca A1. ¡Feliz cumpleaños, Nuvia!">
+<meta property="og:image" content="https://ranulfo661.github.io/vellonera/og-nuvia.jpg">
 <meta property="og:image:width" content="1200">
 <meta property="og:image:height" content="630">
 <meta property="og:url" content="https://ranulfo661.github.io/vellonera/">
@@ -564,7 +564,7 @@ $('#vol').addEventListener('input',e=>{vol=parseFloat(e.target.value);if(master)
 
 buildStrips();buildList();states();updZoomBtn();
 const hoyDed=DISCOS.find(dedActiva);
-setTimeout(()=>toast(hoyDed?`Disco del día: ${hoyDed.id} «${hoyDed.t}», para ${hoyDed.para}. Echa 5¢ y marca ${hoyDed.id}.`:'Echa 5¢ y escoge tu disco.',7000),900);
+setTimeout(()=>toast(hoyDed?`Disco del día para ${hoyDed.para}: echa 5¢ y toca ${hoyDed.id}.`:'Echa 5¢ y escoge tu disco.',7000),900);
 })();
 </script>
 
